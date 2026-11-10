@@ -438,7 +438,7 @@ body.sheet-open{overflow:hidden}
 .strip::-webkit-scrollbar{display:none}
 .chip-st{all:unset;box-sizing:border-box;flex:0 0 33.3333%;min-width:0;padding:0 4px;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font:600 .75rem/1.1 var(--font-body);color:var(--dial-muted);text-align:center;-webkit-tap-highlight-color:transparent}
 .chip-st:focus-visible{outline:3px solid var(--needle);outline-offset:2px;border-radius:14px}
-.chip-st .logo{width:72px;aspect-ratio:1;border-radius:50%;border:2px solid transparent}
+.chip-st .logo{width:82px;aspect-ratio:1;border-radius:50%;border:2px solid transparent}
 .chip-st .logo .badge{display:none}
 .chip-st .mono{font-size:1rem;letter-spacing:-.04em}
 .chip-st span{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -472,7 +472,7 @@ body.amb-open{overflow:hidden}
 .amb .ibtn{border-color:currentColor;color:inherit;width:56px;height:56px}
 .amb .ibtn.play{width:76px;height:76px;background:#fff;color:#0A0F2C;border:0;box-shadow:none}
 
-@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px}   .chip-st .logo{width:62px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
+@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px}   .chip-st .logo{width:72px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
 @media (max-width:760px){
   .now{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:12px}
   .viz{grid-row:auto;width:calc(100% - 104px)}
@@ -503,8 +503,8 @@ body.amb-open{overflow:hidden}
 @media (max-width:340px){ .side{width:46px;height:50px} .controls .ibtn.play{width:56px;height:56px} .ctl-row.rowmain .ibtn:not(.play){width:40px;height:40px} }
 @media (max-height:700px){
   :root{--dock:calc(142px + env(safe-area-inset-bottom,0px))}
-  .chip-st{width:62px}
-  .chip-st .logo{width:56px}
+  .chip-st{width:72px}
+  .chip-st .logo{width:66px}
   .dock .ibtn.play{width:50px;height:50px}
   .eyebrow{display:none}
   .now-name{font-size:1.35rem}
@@ -765,13 +765,13 @@ function logoSources(st){
   if(st.domain) a.push(FAVICON(st.domain));
   return a;
 }
-function logo(st,eq=false){
+function logo(st,eq=false,eager=false){
   const el=h('span',{class:'logo'});
   const mono=h('span',{class:'mono',style:`--c:${st.color};--ci:${st.ink||'#fff'}`},st.mono||st.name.slice(0,2).toUpperCase());
   const srcs=logoSources(st);
   if(srcs.length){
     let i=0;
-    const img=h('img',{alt:'',loading:'lazy',decoding:'async',referrerpolicy:'no-referrer'});
+    const img=h('img',{alt:'',loading:eager?'eager':'lazy',decoding:'async',referrerpolicy:'no-referrer'});
     const set=()=>{ img.className=srcs[i].includes('google.com/s2/favicons')?'ico':'full'; img.src=srcs[i]; };
     img.addEventListener('error',()=>{ i++; if(i<srcs.length) set(); else{ img.remove(); el.prepend(mono); } });
     set(); el.append(img);
@@ -1340,7 +1340,7 @@ function renderStrip(){
   const box=$('#strip'); box.replaceChildren();
   for(const st of S.list){
     box.append(h('button',{class:'chip-st',type:'button','data-id':st.id,
-      onclick:()=>{ if(S.cur.id===st.id) onPick(st); else tune(st); }},logo(st),h('span',{},st.name)));
+      onclick:()=>{ if(S.cur.id===st.id) onPick(st); else tune(st); }},logo(st,false,true),h('span',{},st.name)));
   }
   stripCur=S.cur.id; paintStrip(); centerStrip(false); armArrows();
 }
