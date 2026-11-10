@@ -419,9 +419,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .add .hint{grid-column:1/-1;font-size:.8125rem;color:var(--muted)}
 .add .hint a{color:inherit}
 .add .hint b{color:var(--heart);font-weight:600}
-.foot{margin-top:36px;max-width:62ch;font-size:.8125rem;line-height:1.55;color:var(--muted)}
-.foot a{color:inherit}
-.foot + .foot{margin-top:12px}
+.credits{margin-top:36px;max-width:62ch;font-size:.8125rem;line-height:1.55;color:var(--muted)}
+.credits a{color:inherit}
+.credits + .credits{margin-top:12px}
 
 /* Dock inferior: play + carrusel de emisoras */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;flex-wrap:wrap;align-items:center;align-content:center;background:var(--dial);color:var(--on-dial);border-top:1px solid var(--dial-line);padding:10px max(8px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
@@ -475,11 +475,11 @@ body.sheet-open{overflow:hidden}
 .off-btn small{font:500 .9375rem/1.4 var(--font-mono);color:var(--dial-muted);max-width:26ch}
 @keyframes offin{from{opacity:0}to{opacity:1}}
 body.amb-open{overflow:hidden}
-.amb{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;background:var(--c,#2A3BFF);color:var(--ci,#fff);overflow:hidden;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px calc(env(safe-area-inset-bottom,0px) + 26px)}
+.amb{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;background:radial-gradient(110% 70% at 50% 0%,color-mix(in srgb,var(--c,#2A3BFF) 85%,#000),transparent 70%),radial-gradient(90% 60% at 100% 100%,color-mix(in srgb,var(--c,#2A3BFF) 40%,#3A4BFF),transparent 70%),linear-gradient(180deg,#05060F 0%,#0A0F2C 45%,#000 100%);color:#fff;overflow:hidden;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px calc(env(safe-area-inset-bottom,0px) + 26px)}
 .amb-bg{position:absolute;inset:0;pointer-events:none}
 .amb-bg i{position:absolute;width:80vmax;height:80vmax;border-radius:50%;filter:blur(70px);opacity:.5}
-.amb-bg i:nth-child(1){left:-30vmax;top:-30vmax;background:rgba(255,255,255,.55);animation:drift1 22s ease-in-out infinite alternate}
-.amb-bg i:nth-child(2){right:-35vmax;bottom:-30vmax;background:rgba(5,8,40,.6);animation:drift2 27s ease-in-out infinite alternate}
+.amb-bg i:nth-child(1){left:-30vmax;top:-30vmax;background:var(--c,#2A3BFF);animation:drift1 22s ease-in-out infinite alternate}
+.amb-bg i:nth-child(2){right:-35vmax;bottom:-30vmax;background:#3A4BFF;animation:drift2 27s ease-in-out infinite alternate}
 .amb-bg i:nth-child(3){left:10vmax;top:25vh;width:55vmax;height:55vmax;background:var(--needle);opacity:.28;animation:drift3 19s ease-in-out infinite alternate}
 @keyframes drift1{to{transform:translate(45vmax,35vmax) scale(1.2)}}
 @keyframes drift2{to{transform:translate(-45vmax,-30vmax) scale(.85)}}
@@ -659,8 +659,8 @@ body.amb-open{overflow:hidden}
     </form>
   </details>
 
-  <p class="foot">Sintonía reproduce los streams que cada emisora publica en sus propios servidores. Si alguna no suena, vuelve a tocarla para que pruebe otra fuente, o usa «Fuente» bajo el nombre para probar otro enlace. El título de la canción aparece cuando la emisora lo publica. Enlaces de la lista pública <a href="https://github.com/LaQuay/TDTChannels" target="_blank" rel="noopener">TDTChannels</a> y del directorio <a href="https://www.radio-browser.info" target="_blank" rel="noopener">radio-browser.info</a>. Los logos son de sus respectivas emisoras.</p>
-  <p class="foot">Para tenerla como una app: en Android, menú ⋮ y «Instalar aplicación»; en iPhone, Compartir y «Añadir a pantalla de inicio».</p>
+  <p class="credits">Sintonía reproduce los streams que cada emisora publica en sus propios servidores. Si alguna no suena, vuelve a tocarla para que pruebe otra fuente, o usa «Fuente» bajo el nombre para probar otro enlace. El título de la canción aparece cuando la emisora lo publica. Enlaces de la lista pública <a href="https://github.com/LaQuay/TDTChannels" target="_blank" rel="noopener">TDTChannels</a> y del directorio <a href="https://www.radio-browser.info" target="_blank" rel="noopener">radio-browser.info</a>. Los logos son de sus respectivas emisoras.</p>
+  <p class="credits">Para tenerla como una app: en Android, menú ⋮ y «Instalar aplicación»; en iPhone, Compartir y «Añadir a pantalla de inicio».</p>
 </div>
 </main>
 
