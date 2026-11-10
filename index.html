@@ -43,7 +43,7 @@
   --dial:#0A0F2C; --on-dial:#E9ECFF; --dial-muted:#8993D2; --dial-line:#252D69; --tick:#4A57B4;
   --needle:#FFE14A; --needle-glow:rgba(255,225,74,.45); --on-needle:#0A0F2C;
   --heart:#FF3D6E; --live:#35E08A; --warn:#FFB020;
-  --dock:calc(118px + env(safe-area-inset-bottom,0px));
+  --dock:calc(156px + env(safe-area-inset-bottom,0px));
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
@@ -221,12 +221,17 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .pill[aria-pressed="true"]{color:var(--heart);border-color:var(--heart);background:rgba(255,61,110,.12)}
 .pill[aria-pressed="true"] svg{fill:var(--heart);stroke:var(--heart)}
 .pill.timer.on{color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.1)}
-.sleep-pop{position:fixed;left:50%;bottom:calc(var(--dock) + 16px);z-index:60;width:min(320px,calc(100% - 32px));transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;background:var(--dial);color:var(--on-dial);border:1px solid var(--needle);border-radius:22px;padding:18px 18px 16px;text-align:center;box-shadow:0 20px 50px -10px rgba(4,6,40,.8),0 0 0 6px var(--needle-glow)}
+.sleep-pop{position:fixed;left:50%;bottom:calc(var(--dock) + 14px);z-index:90;width:min(340px,calc(100% - 28px));transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;background:var(--dial);color:var(--on-dial);border:1px solid var(--needle);border-radius:24px;padding:18px 16px 16px;text-align:center;box-shadow:0 20px 50px -10px rgba(4,6,40,.85),0 0 0 6px var(--needle-glow)}
 .sleep-pop.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.sleep-pop .eyebrow{margin-bottom:10px}
-.sleep-pop .big{font:800 2.5rem/1 var(--font-display);color:var(--needle);letter-spacing:-.03em}
-.sleep-pop .sub{margin-top:10px;font:500 .875rem/1.35 var(--font-body);color:var(--dial-muted)}
-.sleep-pop button{margin-top:12px;border:1px solid var(--dial-line);background:transparent;color:var(--on-dial);border-radius:999px;padding:11px 18px;font:600 .875rem/1 var(--font-body);cursor:pointer}
+.sleep-pop .eyebrow{margin-bottom:12px}
+.sleep-pop .step{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sleep-pop .step .ibtn{width:64px;height:64px;font:800 1.0625rem/1 var(--font-body);color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.08)}
+.sleep-pop .step .ibtn:disabled{opacity:.35;cursor:default}
+.sleep-pop .big{flex:1;font:800 1.75rem/1.1 var(--font-display);color:var(--needle);letter-spacing:-.03em}
+.sleep-pop .sub{margin-top:12px;font:500 .875rem/1.35 var(--font-body);color:var(--dial-muted)}
+.sleep-actions{display:flex;gap:10px;margin-top:14px}
+.sleep-actions button{flex:1;border:1px solid var(--dial-line);background:transparent;color:var(--on-dial);border-radius:14px;padding:13px 10px;font:700 .9375rem/1 var(--font-body);cursor:pointer}
+.sleep-actions button.primary{background:var(--needle);color:var(--on-needle);border-color:var(--needle)}
 
 /* ---------- Emisoras ---------- */
 .main{padding-top:28px;padding-bottom:calc(var(--dock) + 28px)}
@@ -294,10 +299,20 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .foot + .foot{margin-top:12px}
 
 /* Dock inferior: play + carrusel de emisoras */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;background:var(--dial);color:var(--on-dial);border-top:1px solid var(--dial-line);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;flex-wrap:wrap;align-items:center;align-content:center;background:var(--dial);color:var(--on-dial);border-top:1px solid var(--dial-line);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
 .dock .ibtn.play{width:60px;height:60px;flex:none;margin-right:8px;box-shadow:0 0 0 4px var(--needle-glow)}
 .dock .dockfav{width:46px;height:46px;flex:none;margin-right:2px}
 .dock .dockfav[aria-pressed="true"]{background:var(--heart);border-color:var(--heart);color:#fff}
+.dock-more{flex:0 0 calc(100% - 24px);display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 0;min-height:36px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .8125rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
+.dock-more:hover{color:var(--needle);border-color:var(--needle)}
+.dock-more svg{width:16px;height:16px;transition:transform .25s}
+.dock-more.open svg{transform:rotate(180deg)}
+.sheet{position:fixed;inset:0;z-index:70;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;transform:translateY(100%);visibility:hidden;transition:transform .35s cubic-bezier(.3,.8,.2,1),visibility 0s .35s}
+.sheet.open{transform:none;visibility:visible;transition:transform .35s cubic-bezier(.3,.8,.2,1)}
+.sheet-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 14px) max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));background:var(--bg);border-bottom:1px solid var(--line)}
+.sheet-top h2{font-family:var(--font-display);font-weight:600;font-size:1.125rem;letter-spacing:-.02em}
+.sheet-close{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:9px 16px;font:700 .875rem/1 var(--font-body);cursor:pointer}
+body.sheet-open{overflow:hidden}
 .strip-empty{align-self:center;padding:0 10px;font:500 .8125rem/1.3 var(--font-body);color:var(--dial-muted);white-space:normal;max-width:210px}
 .dock .ibtn.play svg{width:26px;height:26px}
 .strip{position:relative;flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px 18px 4px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 26px),transparent)}
@@ -341,7 +356,7 @@ body.amb-open{overflow:hidden}
   .song,.status{justify-content:center;max-width:100%}
   .console{padding:16px 16px 20px}
   .controls{grid-column:1/-1;width:100%}
-  .now-logo .logo{width:clamp(76px,calc(100svh - 575px),min(46vw,190px));border-radius:26px}
+  .now-logo .logo{width:clamp(76px,calc(100svh - 615px),min(46vw,190px));border-radius:26px}
   .now-name{font-size:clamp(1.6rem,7vw,2.2rem)}
   .add form,#npForm{grid-template-columns:1fr}
 }
@@ -361,7 +376,7 @@ body.amb-open{overflow:hidden}
   .song,.status{margin-top:6px}
 }
 @media (max-height:700px){
-  :root{--dock:calc(104px + env(safe-area-inset-bottom,0px))}
+  :root{--dock:calc(142px + env(safe-area-inset-bottom,0px))}
   .chip-st{width:62px}
   .chip-st .logo{width:56px}
   .dock .ibtn.play{width:50px;height:50px}
@@ -429,7 +444,6 @@ body.amb-open{overflow:hidden}
               <button class="pill timer" id="sleepBtn" type="button" aria-label="Temporizador de apagado"><span data-icon="timer"></span><b id="sleepLabel">Apagado</b></button>
               <button class="pill scr" id="ambBtn" type="button" aria-label="Modo pantalla"><span data-icon="screen"></span><b>Pantalla</b></button>
             </div>
-            <label class="vol" id="volWrap"><span data-icon="vol" aria-hidden="true"></span><input id="vol" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volumen"></label>
           </div>
         </div>
 
@@ -438,14 +452,16 @@ body.amb-open{overflow:hidden}
   </div>
 </header>
 
-<main class="wrap main">
+<main class="sheet" id="sheet" aria-label="Funciones avanzadas" inert>
+<div class="sheet-top"><h2>Funciones avanzadas</h2><button class="sheet-close" id="sheetClose" type="button">Cerrar</button></div>
+<div class="wrap main">
   <div class="section-head">
     <h2>Emisoras</h2>
     <div class="filters" id="filters" role="group" aria-label="Filtrar emisoras"></div>
   </div>
   <ul class="grid" id="grid"></ul>
 
-  <details class="add">
+  <details class="add" open>
     <summary>Añadir una emisora</summary>
     <form id="addForm">
       <label for="addName">Nombre
@@ -472,19 +488,25 @@ body.amb-open{overflow:hidden}
 
   <p class="foot">Sintonía reproduce los streams que cada emisora publica en sus propios servidores. Si alguna no suena, vuelve a tocarla para que pruebe otra fuente, o usa «Fuente» bajo el nombre para probar otro enlace. El título de la canción aparece cuando la emisora lo publica. Enlaces de la lista pública <a href="https://github.com/LaQuay/TDTChannels" target="_blank" rel="noopener">TDTChannels</a> y del directorio <a href="https://www.radio-browser.info" target="_blank" rel="noopener">radio-browser.info</a>. Los logos son de sus respectivas emisoras.</p>
   <p class="foot">Para tenerla como una app: en Android, menú ⋮ y «Instalar aplicación»; en iPhone, Compartir y «Añadir a pantalla de inicio».</p>
+</div>
 </main>
 
-<div class="sleep-pop" id="sleepPop" role="status" aria-live="polite" inert>
+<div class="sleep-pop" id="sleepPop" role="dialog" aria-label="Temporizador de apagado" inert>
   <p class="eyebrow">Apagar en</p>
-  <div class="big" id="sleepBig">15 min</div>
+  <div class="step">
+    <button class="ibtn" id="sleepMinus" type="button" aria-label="Restar 15 minutos">−15</button>
+    <div class="big" id="sleepBig">15 min</div>
+    <button class="ibtn" id="sleepPlus" type="button" aria-label="Sumar 15 minutos">+15</button>
+  </div>
   <p class="sub" id="sleepSub"></p>
-  <button type="button" id="sleepOff">Quitar temporizador</button>
+  <div class="sleep-actions"><button type="button" id="sleepOff">Quitar</button><button type="button" id="sleepDone" class="primary">Listo</button></div>
 </div>
 
 <nav class="dock" id="dock" aria-label="Cambiar de emisora">
   <button class="ibtn play" id="dockPlay" type="button" aria-label="Escuchar"></button>
   <button class="ibtn dockfav" id="dockFav" type="button" aria-pressed="false" aria-label="Ver solo mis favoritas" data-icon="heart"></button>
   <div class="strip" id="strip"></div>
+  <button class="dock-more" id="moreBtn" type="button" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="moreLabel">Funciones avanzadas</span></button>
 </nav>
 
 <div class="amb" id="amb" hidden role="dialog" aria-label="Modo pantalla">
@@ -582,7 +604,7 @@ const audio=$('#audio');
 const S={
   list:[],favs:new Set(store.get('favs',[])),filter:'all',cur:null,curUrl:null,mode:'idle',
   token:0,hls:null,attempting:false,buffering:false,ready:false,retries:0,waitT:null,
-  vol:store.get('vol',0.8),stripFav:store.get('stripFav',false),sleepEnd:0,sleepT:null,song:'',bad:new Map()
+  vol:1,stripFav:store.get('stripFav',false),sleepEnd:0,sleepT:null,song:'',bad:new Map()
 };
 S.list=[...BUILTIN,...store.get('custom',[]).map(c=>({...c,custom:true}))];
 const lastId=store.get('last',null);
@@ -1025,38 +1047,45 @@ function sleepTick(){
   }
   label.hidden=false; label.textContent='Se apaga en '+fmt(left); $('#sleepLabel').textContent=fmt(left);
   btn.classList.add('on');
+  if($('#sleepPop').classList.contains('show')) paintSleepPop();
   if(left<=10000) audio.volume=Math.max(0,S.vol*(left/10000));
 }
-/* Cada toque en «Apagado» suma 15 min (15, 30, 45, 1 h… hasta 2 h; después se quita). */
+/* «Apagado» abre una ventana con − / + de 15 en 15 min (hasta 4 h). */
 let sleepPopT=null;
 const minTxt=m=>m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+(m%60)+' min':'');
-function showSleepPop(m){
-  $('#sleepBig').textContent=m?minTxt(m):'Quitado';
-  $('#sleepSub').textContent=m?(m<120?'Toca «Apagado» otra vez para sumar 15 min':'Es el máximo. Un toque más y se quita.'):'El temporizador está desactivado.';
-  $('#sleepOff').hidden=!m;
-  const pop=$('#sleepPop'); pop.inert=false; pop.classList.add('show');
-  clearTimeout(sleepPopT); sleepPopT=setTimeout(()=>{ pop.classList.remove('show'); pop.inert=true; },3800);
+const sleepMin=()=>S.sleepEnd?Math.ceil(Math.max(0,S.sleepEnd-Date.now())/60000):0;
+function paintSleepPop(){
+  const m=sleepMin();
+  $('#sleepBig').textContent=m?minTxt(m):'Desactivado';
+  $('#sleepSub').textContent=m?'Se apagará a las '+new Date(S.sleepEnd).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'Pulsa +15 para activarlo';
+  $('#sleepOff').hidden=!m; $('#sleepMinus').disabled=!m;
+}
+function openSleepPop(){
+  const pop=$('#sleepPop'); paintSleepPop(); pop.inert=false; pop.classList.add('show'); bumpSleepPop();
+}
+function bumpSleepPop(){ clearTimeout(sleepPopT); sleepPopT=setTimeout(closeSleepPop,9000); }
+function closeSleepPop(){ const pop=$('#sleepPop'); pop.classList.remove('show'); pop.inert=true; clearTimeout(sleepPopT); }
+function adjustSleep(d){
+  const r=Math.round(sleepMin()/15)*15;
+  const t=d>0?Math.min(240,r+15):Math.max(15,r-15);
+  if(d<0&&!S.sleepEnd) return;
+  setSleep(t); paintSleepPop(); bumpSleepPop();
 }
 $('#sleepBtn').addEventListener('click',()=>{
-  const pop=$('#sleepPop');
-  const left=S.sleepEnd?Math.max(0,S.sleepEnd-Date.now()):0;
-  const base=Math.round(Math.ceil(left/60000)/15)*15;
-  if(S.sleepEnd&&!pop.classList.contains('show')){ showSleepPop(Math.ceil(left/60000)); return; }
-  const n=base>=120?0:Math.min(120,base+15);
-  setSleep(n); showSleepPop(n);
+  if($('#sleepPop').classList.contains('show')){ closeSleepPop(); return; }
+  if(!S.sleepEnd) setSleep(15);
+  openSleepPop();
 });
-$('#sleepOff').addEventListener('click',()=>{ setSleep(0); showSleepPop(0); });
+$('#sleepPlus').addEventListener('click',()=>adjustSleep(1));
+$('#sleepMinus').addEventListener('click',()=>adjustSleep(-1));
+$('#sleepOff').addEventListener('click',()=>{ setSleep(0); paintSleepPop(); bumpSleepPop(); });
+$('#sleepDone').addEventListener('click',closeSleepPop);
+document.addEventListener('pointerdown',e=>{
+  if(!$('#sleepPop').classList.contains('show')) return;
+  if(e.target.closest('#sleepPop,#sleepBtn')) return;
+  closeSleepPop();
+});
 document.addEventListener('visibilitychange',()=>{ if(S.sleepEnd) sleepTick(); });
-
-/* ---------- Volumen ---------- */
-const volOK=(()=>{ try{ const a=new Audio(); a.volume=.5; return a.volume===.5; }catch{ return false; } })();
-const volEl=$('#vol');
-function paintVol(){ volEl.style.setProperty('--p',(S.vol*100)+'%'); }
-if(!volOK) $('#volWrap').hidden=true;
-volEl.value=S.vol; audio.volume=S.vol; paintVol();
-volEl.addEventListener('input',()=>{
-  S.vol=parseFloat(volEl.value); audio.volume=S.vol; paintVol(); store.set('vol',S.vol);
-});
 
 /* ---------- Pintado ---------- */
 const STATUS={
@@ -1109,7 +1138,6 @@ function markCards(){
    El navegador no deja analizar el audio de emisoras de otros servidores, así que el movimiento es una animación. */
 const viz=$('#viz'), vg=viz.getContext('2d');
 const VN=34, vLv=new Float32Array(VN), vTg=new Float32Array(VN), vPk=new Float32Array(VN);
-const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let vRaf=0, vNext=0, vW=0, vH=0;
 function vSize(){
   const r=viz.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
@@ -1129,7 +1157,7 @@ function vDraw(t){
   let moving=false;
   for(let i=0;i<VN;i++){
     const up=vTg[i]>vLv[i];
-    vLv[i]=reduceMotion?vTg[i]:vLv[i]+(vTg[i]-vLv[i])*(up?0.5:0.16);
+    vLv[i]+=(vTg[i]-vLv[i])*(up?0.5:0.16);
     if(Math.abs(vTg[i]-vLv[i])>0.008) moving=true;
     vPk[i]=vLv[i]>vPk[i]?vLv[i]:Math.max(vLv[i],vPk[i]-0.007);
     if(vPk[i]-vLv[i]>0.008) moving=true;
@@ -1141,11 +1169,13 @@ function vDraw(t){
   vg.globalAlpha=live?1:0.55;
   for(let i=0;i<VN;i++){
     const x=i*bw+gap/2, bh=Math.max(vH*0.05,vLv[i]*vH*0.88);
-    vg.fillStyle=grad; vg.beginPath(); vg.roundRect(x,vH-bh,w,bh,rad); vg.fill();
+    vg.fillStyle=grad; vg.beginPath();
+    if(vg.roundRect) vg.roundRect(x,vH-bh,w,bh,rad); else vg.rect(x,vH-bh,w,bh);
+    vg.fill();
     if(live||tune){ vg.fillStyle='rgba(255,255,255,.9)'; const py=vH-Math.max(bh,vPk[i]*vH*0.88)-vH*0.07; vg.fillRect(x,Math.max(0,py),w,Math.max(2,vH*0.03)); }
   }
   vg.globalAlpha=1;
-  if(!document.hidden&&!reduceMotion&&(live||tune||moving)) vRaf=requestAnimationFrame(vDraw);
+  if(!document.hidden&&(live||tune||moving)) vRaf=requestAnimationFrame(vDraw);
 }
 function startViz(){ if(!vRaf&&vW) vRaf=requestAnimationFrame(vDraw); }
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden) startViz(); });
@@ -1353,6 +1383,17 @@ $('#nextBtn').addEventListener('click',()=>step(1));
 $('#favBtn').addEventListener('click',()=>toggleFav(S.cur.id));
 $('#srcBtn').addEventListener('click',nextSource);
 $('#dockFav').addEventListener('click',()=>{ S.stripFav=!S.stripFav; store.set('stripFav',S.stripFav); renderStrip(); });
+const sheet=$('#sheet');
+function setSheet(open){
+  sheet.classList.toggle('open',open); sheet.inert=!open;
+  document.body.classList.toggle('sheet-open',open);
+  $('#moreBtn').setAttribute('aria-expanded',String(open));
+  $('#moreBtn').classList.toggle('open',open);
+  $('#moreLabel').textContent=open?'Cerrar':'Funciones avanzadas';
+  if(open) sheet.scrollTop=0;
+}
+$('#moreBtn').addEventListener('click',()=>setSheet(!sheet.classList.contains('open')));
+$('#sheetClose').addEventListener('click',()=>setSheet(false));
 $('#ambBtn').addEventListener('click',openAmb);
 $('#ambClose').addEventListener('click',closeAmb);
 $('#ambPlay').addEventListener('click',toggle);
@@ -1363,6 +1404,7 @@ $('#dockPlay').addEventListener('click',toggle);
 document.addEventListener('keydown',e=>{
   if(!cover.hidden) return;
   if(e.key==='Escape'&&!amb.hidden){ closeAmb(); return; }
+  if(e.key==='Escape'&&sheet.classList.contains('open')){ setSheet(false); return; }
   if(e.metaKey||e.ctrlKey||e.altKey) return;
   if(e.target.closest&&e.target.closest('input,textarea,select,summary')) return;
   if(e.code==='Space'&&e.target===document.body){ e.preventDefault(); toggle(); }
