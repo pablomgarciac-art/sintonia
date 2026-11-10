@@ -341,6 +341,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .side[aria-pressed="true"]{color:var(--heart);border-color:var(--heart);background:rgba(255,61,110,.12)}
 .side[aria-pressed="true"] svg{fill:var(--heart);stroke:var(--heart)}
 .side.timer.on{color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.1)}
+.sleep-pop .flashmsg{display:none;margin:0;white-space:nowrap;font:700 .9375rem/1.2 var(--font-body)}
+.sleep-pop.flash{width:max-content;padding:12px 20px;border-radius:999px;box-shadow:0 12px 30px -10px rgba(4,6,40,.85)}
+.sleep-pop.flash>:not(.flashmsg){display:none}
+.sleep-pop.flash .flashmsg{display:block}
 .sleep-pop{position:fixed;left:50%;bottom:calc(var(--dock) + 14px);z-index:90;width:min(340px,calc(100% - 28px));transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;background:var(--dial);color:var(--on-dial);border:1px solid var(--needle);border-radius:24px;padding:18px 16px 16px;text-align:center;box-shadow:0 20px 50px -10px rgba(4,6,40,.85),0 0 0 6px var(--needle-glow)}
 .sleep-pop.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .sleep-pop .eyebrow{margin-bottom:12px}
@@ -661,6 +665,7 @@ body.amb-open{overflow:hidden}
 </main>
 
 <div class="sleep-pop" id="sleepPop" role="dialog" aria-label="Temporizador de apagado" inert>
+  <p class="flashmsg" aria-live="polite">Temporizador desactivado</p>
   <p class="eyebrow">Apagar en</p>
   <div class="step">
     <button class="ibtn" id="sleepMinus" type="button" aria-label="Restar 15 minutos">−15</button>
@@ -1260,7 +1265,10 @@ $('#sleepBtn').addEventListener('click',sleepToggle);
 $('#fabSleep').addEventListener('click',sleepToggle);
 $('#sleepPlus').addEventListener('click',()=>adjustSleep(1));
 $('#sleepMinus').addEventListener('click',()=>adjustSleep(-1));
-$('#sleepOff').addEventListener('click',()=>{ setSleep(0); paintSleepPop(); bumpSleepPop(); });
+$('#sleepOff').addEventListener('click',()=>{
+  setSleep(0); const pop=$('#sleepPop'); pop.classList.add('flash');
+  clearTimeout(sleepPopT); sleepPopT=setTimeout(()=>{ closeSleepPop(); setTimeout(()=>{ pop.classList.remove('flash'); paintSleepPop(); },300); },1100);
+});
 $('#sleepDone').addEventListener('click',closeSleepPop);
 document.addEventListener('pointerdown',e=>{
   if(!$('#sleepPop').classList.contains('show')) return;
