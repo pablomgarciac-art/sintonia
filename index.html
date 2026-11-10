@@ -344,10 +344,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .dock .ibtn.play{width:60px;height:60px;flex:none;margin-right:8px;box-shadow:0 0 0 4px var(--needle-glow)}
 .dock .dockfav{width:46px;height:46px;flex:none;margin-right:2px}
 .dock .dockfav[aria-pressed="true"]{background:var(--heart);border-color:var(--heart);color:#fff}
-.strip-arrow{flex:none;width:30px;height:68px;display:grid;place-items:center;padding:0;border:0;border-radius:12px;background:transparent;color:var(--on-dial);cursor:pointer;margin-top:-14px}
-.strip-arrow svg{width:20px;height:20px}
-.strip-arrow:hover{background:rgba(255,255,255,.08)}
-.strip-arrow:disabled{opacity:.25;cursor:default}
+.strip-arrow{flex:none;align-self:flex-start;margin-top:19px;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:var(--needle);color:var(--on-needle);cursor:pointer;box-shadow:0 0 0 3px var(--needle-glow)}
+.strip-arrow svg{width:22px;height:22px}
+.strip-arrow:hover{background:#FFEB7A}
+.strip-arrow:disabled{opacity:.28;box-shadow:none;cursor:default}
 .dock-more{flex:0 0 100%;display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 0;min-height:36px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .8125rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
 .dock-more:hover{color:var(--needle);border-color:var(--needle)}
 .dock-more svg{width:16px;height:16px;transition:transform .25s}
@@ -1468,7 +1468,7 @@ $('#moreBtn').addEventListener('click',()=>setSheet(!sheet.classList.contains('o
 $('#sheetClose').addEventListener('click',()=>setSheet(false));
 $('#favTop').addEventListener('click',()=>{
   setSheet(true);
-  setTimeout(()=>{ const t=$('#favTitle'); if(t) sheet.scrollTo({top:Math.max(0,t.closest('.favsec').offsetTop-70),behavior:'smooth'}); },60);
+  setTimeout(()=>{ const t=$('#favTitle'); if(t) sheet.scrollTo({top:Math.max(0,t.closest('.favsec').offsetTop-$('.sheet-top').offsetHeight-14),behavior:'smooth'}); },60);
 });
 $('#ambBtn').addEventListener('click',openAmb);
 $('#ambClose').addEventListener('click',closeAmb);
