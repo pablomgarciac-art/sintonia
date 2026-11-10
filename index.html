@@ -463,6 +463,13 @@ body.sheet-open{overflow:hidden}
 @keyframes chipin{from{transform:scale(.9);opacity:.4}to{transform:none}}
 
 /* Modo pantalla (stand-by con colores) */
+.off{position:fixed;inset:0;z-index:400;display:grid;place-items:center;background:radial-gradient(90% 60% at 50% 0%,rgba(58,75,255,.45),transparent 70%),radial-gradient(80% 50% at 50% 100%,rgba(255,61,110,.28),transparent 70%),linear-gradient(180deg,#0B1040,#04061A);color:#E9ECFF;animation:offin .6s ease both}
+.off[hidden]{display:none}
+.off-btn{all:unset;box-sizing:border-box;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;cursor:pointer;padding:24px}
+.off-ic{display:grid;place-items:center;width:104px;height:104px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06);margin-bottom:10px}
+.off-btn b{font:800 clamp(2.2rem,10vw,3.4rem)/1 var(--font-display);letter-spacing:-.03em}
+.off-btn small{font:500 .9375rem/1.4 var(--font-mono);color:var(--dial-muted);max-width:26ch}
+@keyframes offin{from{opacity:0}to{opacity:1}}
 body.amb-open{overflow:hidden}
 .amb{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;background:var(--c,#2A3BFF);color:var(--ci,#fff);overflow:hidden;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px calc(env(safe-area-inset-bottom,0px) + 26px)}
 .amb-bg{position:absolute;inset:0;pointer-events:none}
@@ -474,9 +481,12 @@ body.amb-open{overflow:hidden}
 @keyframes drift2{to{transform:translate(-45vmax,-30vmax) scale(.85)}}
 @keyframes drift3{to{transform:translate(35vmax,-20vmax) scale(1.35)}}
 .amb-top{position:relative;width:100%;display:flex;justify-content:space-between;align-items:center}
-.amb-clock{white-space:nowrap;font:700 min(19vw,12vh,8rem)/1 var(--font-mono);letter-spacing:.02em;color:#FFE14A;background:rgba(5,8,30,.62);border:2px solid rgba(255,255,255,.14);border-radius:22px;padding:.12em .28em .16em;text-shadow:0 0 .12em rgba(255,225,74,.9),0 0 .5em rgba(255,200,40,.55);box-shadow:inset 0 0 0 4px rgba(0,0,0,.25),0 24px 50px -18px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
-.amb-clock .co{display:inline-block;margin:0 .02em;animation:cblink 1s steps(1) infinite!important}
-@keyframes cblink{50%{opacity:.15}}
+.amb-clock{display:flex;align-items:center;justify-content:center;gap:min(2.2vw,.7vh + 6px);background:linear-gradient(180deg,#1a0f10,#060405);border:2px solid rgba(255,255,255,.14);border-radius:18px;padding:.9em 1em;box-shadow:inset 0 0 0 4px rgba(0,0,0,.45),inset 0 8px 24px rgba(0,0,0,.6),0 24px 50px -18px rgba(0,0,0,.6)}
+.amb-clock svg{height:min(21vw,14vh,8.5rem);width:auto;display:block;overflow:visible}
+.amb-clock .on{fill:#FF4B2B;filter:drop-shadow(0 0 5px rgba(255,75,43,.9))}
+.amb-clock .off{fill:rgba(255,75,43,.09)}
+.amb-clock .sep{width:min(3.4vw,2.2vh + 4px);display:flex;flex-direction:column;justify-content:center;gap:26%;align-self:stretch}
+.amb-clock .sep i{display:block;aspect-ratio:1;background:#FF4B2B;box-shadow:0 0 8px rgba(255,75,43,.9)}
 .amb-close{border:1px solid currentColor;background:transparent;color:inherit;border-radius:999px;padding:11px 18px;font:700 .9375rem/1 var(--font-body);cursor:pointer;opacity:.9}
 .amb-body{position:relative;display:flex;flex-direction:column;align-items:center;gap:18px;max-width:92vw}
 .amb-logo .logo{width:min(56vw,240px,24vh);aspect-ratio:1;border-radius:28px;border:0;box-shadow:0 24px 60px -16px rgba(0,0,0,.5)}
@@ -555,7 +565,7 @@ body.amb-open{overflow:hidden}
     <div class="cover-actions">
       <button class="cta big" id="coverGo" type="button"></button>
       <button class="ghost big" id="coverSkip" type="button"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Ajustes</button>
-      <button class="ghost big exit" id="coverExit" type="button"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v9"/><path d="M6.4 6.6a8 8 0 1 0 11.2 0"/></svg><span id="coverExitT">Salir</span></button>
+      <button class="ghost big exit" id="coverExit" type="button"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v9"/><path d="M6.4 6.6a8 8 0 1 0 11.2 0"/></svg>Salir</button>
       <button class="ghost" id="installBtn" type="button" hidden>Instalar en el móvil</button>
     </div>
   </div>
@@ -671,6 +681,13 @@ body.amb-open{overflow:hidden}
   </div>
 </nav>
 
+<div class="off" id="offScreen" hidden role="dialog" aria-label="Apagado">
+  <button type="button" id="offBack" class="off-btn">
+    <span class="off-ic"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v9"/><path d="M6.4 6.6a8 8 0 1 0 11.2 0"/></svg></span>
+    <b>Hasta pronto</b>
+    <small>Música parada · toca para volver a Sintonía</small>
+  </button>
+</div>
 <div class="amb" id="amb" hidden role="dialog" aria-label="Modo pantalla">
   <div class="amb-bg" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="amb-top"><span></span><button class="amb-close" id="ambClose" type="button">Cerrar</button></div>
@@ -1544,14 +1561,13 @@ function reopenCover(){
 }
 $('#coverGo').addEventListener('click',()=>closeCover(!(S.mode==='playing'||S.mode==='tuning')));
 $('#homeBtn').addEventListener('click',reopenCover);
-let exitT=null;
+const offScreen=$('#offScreen');
 $('#coverExit').addEventListener('click',()=>{
   try{ setSleep(0); }catch{}
-  if(S.mode==='playing'||S.mode==='tuning'||S.mode==='error') pauseNow();
-  setCoverButton();
-  const t=$('#coverExitT'); t.textContent='Música parada · hasta pronto';
-  clearTimeout(exitT); exitT=setTimeout(()=>{ t.textContent='Salir'; },2600);
+  pauseNow(); setCoverButton();
+  offScreen.hidden=false; $('#offBack').focus({preventScroll:true});
 });
+$('#offBack').addEventListener('click',()=>{ offScreen.hidden=true; $('#coverGo').focus({preventScroll:true}); });
 $('#coverSkip').addEventListener('click',()=>{ closeCover(false); setTimeout(()=>setSheet(true),400); });
 
 /* ---------- Modo pantalla ---------- */
@@ -1563,9 +1579,14 @@ function paintAmb(){
   if(ambShown!==st.id){ ambShown=st.id; $('#ambLogo').replaceChildren(logo(st)); $('#ambName').textContent=st.name; }
   $('#ambSong').textContent=(S.mode==='playing'&&S.song)?S.song:statusText();
 }
+const SEGS={a:'12,6 16,2 44,2 48,6 44,10 16,10',b:'48,10 52,6 56,10 56,46 52,50 48,46',c:'48,54 52,50 56,54 56,90 52,94 48,90',d:'12,94 16,90 44,90 48,94 44,98 16,98',e:'4,54 8,50 12,54 12,90 8,94 4,90',f:'4,10 8,6 12,10 12,46 8,50 4,46',g:'12,50 16,46 44,46 48,50 44,54 16,54'};
+const DIG=['abcdef','bc','abdeg','abcdg','bcfg','acdfg','acdefg','abc','abcdefg','abcdfg'];
+const digitSVG=n=>'<svg viewBox="0 0 60 100" aria-hidden="true"><g transform="skewX(-5) translate(4 0)">'+Object.keys(SEGS).map(k=>`<polygon class="${DIG[n].includes(k)?'on':'off'}" points="${SEGS[k]}"/>`).join('')+'</g></svg>';
+let ambLast='';
 function ambClock(){
-  const [a,b]=new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',hour12:false}).split(':');
-  $('#ambClock').replaceChildren(a,h('span',{class:'co'},':'),b);
+  const t=new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',hour12:false}).replace(/\D/g,'');
+  if(t===ambLast) return; ambLast=t;
+  $('#ambClock').innerHTML=digitSVG(+t[0])+digitSVG(+t[1])+'<span class="sep"><i></i><i></i></span>'+digitSVG(+t[2])+digitSVG(+t[3]);
 }
 async function getWake(){ try{ if(navigator.wakeLock&&!amb.hidden) wake=await navigator.wakeLock.request('screen'); }catch{} }
 function openAmb(){
