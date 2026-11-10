@@ -161,7 +161,9 @@ h1,h2,p{margin:0}
 .console[data-mode="tuning"] .needle{animation:seek .45s ease-in-out infinite alternate}
 @keyframes seek{from{transform:translateX(-4px)}to{transform:translateX(4px)}}
 
-/* Dial compacto del reproductor */
+/* Ecualizador del reproductor */
+.viz{display:block;width:100%;height:72px;margin:0 0 6px}
+/* (dial antiguo) */
 .console .dial{height:50px;margin:0 8px 6px}
 .console .dial-scale{height:30px}
 .console .needle{height:36px;top:-4px}
@@ -219,12 +221,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .pill[aria-pressed="true"]{color:var(--heart);border-color:var(--heart);background:rgba(255,61,110,.12)}
 .pill[aria-pressed="true"] svg{fill:var(--heart);stroke:var(--heart)}
 .pill.timer.on{color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.1)}
-.sleep{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:20px;padding-top:18px;border-top:1px solid var(--dial-line)}
-.sleep-label{font:500 .75rem/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dial-muted)}
-.sleep-opts{display:flex;flex-wrap:wrap;gap:8px}
-.sleep-opts button{border:1px solid var(--dial-line);background:transparent;color:var(--on-dial);border-radius:999px;padding:9px 14px;font:500 .875rem/1 var(--font-body);cursor:pointer}
-.sleep-opts button:hover{border-color:var(--needle);color:var(--needle)}
-.sleep-opts button.cancel{border-color:transparent;color:var(--dial-muted);text-decoration:underline;text-underline-offset:3px}
+.sleep-pop{position:fixed;left:50%;bottom:calc(var(--dock) + 16px);z-index:60;width:min(320px,calc(100% - 32px));transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;background:var(--dial);color:var(--on-dial);border:1px solid var(--needle);border-radius:22px;padding:18px 18px 16px;text-align:center;box-shadow:0 20px 50px -10px rgba(4,6,40,.8),0 0 0 6px var(--needle-glow)}
+.sleep-pop.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.sleep-pop .eyebrow{margin-bottom:10px}
+.sleep-pop .big{font:800 2.5rem/1 var(--font-display);color:var(--needle);letter-spacing:-.03em}
+.sleep-pop .sub{margin-top:10px;font:500 .875rem/1.35 var(--font-body);color:var(--dial-muted)}
+.sleep-pop button{margin-top:12px;border:1px solid var(--dial-line);background:transparent;color:var(--on-dial);border-radius:999px;padding:11px 18px;font:600 .875rem/1 var(--font-body);cursor:pointer}
 
 /* ---------- Emisoras ---------- */
 .main{padding-top:28px;padding-bottom:calc(var(--dock) + 28px)}
@@ -339,10 +341,35 @@ body.amb-open{overflow:hidden}
   .song,.status{justify-content:center;max-width:100%}
   .console{padding:16px 16px 20px}
   .controls{grid-column:1/-1;width:100%}
-  .now-logo .logo{width:min(46vw,190px);border-radius:26px}
+  .now-logo .logo{width:clamp(76px,calc(100svh - 575px),min(46vw,190px));border-radius:26px}
   .now-name{font-size:clamp(1.6rem,7vw,2.2rem)}
   .add form,#npForm{grid-template-columns:1fr}
 }
+/* Ajuste a pantallas bajas (iPhone SE/mini, Android pequeños): todo cabe sin cortarse */
+@media (max-height:760px){
+  .viz{height:54px}
+  .console .dial{height:42px;margin:0 8px 2px}
+  .console .dial-scale{height:26px}
+  .console .dial-labels{display:none}
+  .eyebrow{margin-bottom:4px}
+  .pill{min-height:46px}
+  .ibtn.play{width:64px;height:64px}
+  .vol{display:none}
+  .now{gap:8px}
+  .console{padding:12px 14px 14px}
+  .controls{gap:10px}
+  .song,.status{margin-top:6px}
+}
+@media (max-height:700px){
+  :root{--dock:calc(104px + env(safe-area-inset-bottom,0px))}
+  .chip-st{width:62px}
+  .chip-st .logo{width:56px}
+  .dock .ibtn.play{width:50px;height:50px}
+  .eyebrow{display:none}
+  .now-name{font-size:1.35rem}
+  .ctl-row.rowmain{gap:14px}
+}
+@media (max-height:600px){ .viz{height:40px} .hero{padding-top:calc(env(safe-area-inset-top,0px) + 6px)} .status{display:none} }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
@@ -379,11 +406,7 @@ body.amb-open{overflow:hidden}
 
     <section class="console-wrap" aria-label="Reproductor">
       <div class="console" id="console" data-mode="idle">
-        <div class="dial" aria-hidden="true">
-          <div class="dial-scale"><div class="dots" id="dots"></div></div>
-          <div class="dial-labels" id="labels"></div>
-          <div class="needle" id="needle"></div>
-        </div>
+        <canvas class="viz" id="viz" aria-hidden="true"></canvas>
 
         <div class="now">
           <div class="now-logo" id="nowLogo"></div>
@@ -403,17 +426,13 @@ body.amb-open{overflow:hidden}
             </div>
             <div class="pills">
               <button class="pill" id="favBtn" type="button" aria-pressed="false" aria-label="Añadir a favoritas"><span data-icon="heart"></span><b id="favLabel">Favorita</b></button>
-              <button class="pill timer" id="sleepBtn" type="button" aria-expanded="false" aria-controls="sleepPanel" aria-label="Temporizador de apagado"><span data-icon="timer"></span><b id="sleepLabel">Apagado</b></button>
+              <button class="pill timer" id="sleepBtn" type="button" aria-label="Temporizador de apagado"><span data-icon="timer"></span><b id="sleepLabel">Apagado</b></button>
               <button class="pill scr" id="ambBtn" type="button" aria-label="Modo pantalla"><span data-icon="screen"></span><b>Pantalla</b></button>
             </div>
             <label class="vol" id="volWrap"><span data-icon="vol" aria-hidden="true"></span><input id="vol" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volumen"></label>
           </div>
         </div>
 
-        <div class="sleep" id="sleepPanel" hidden>
-          <span class="sleep-label">Apagar en</span>
-          <div class="sleep-opts" id="sleepOpts"></div>
-        </div>
       </div>
     </section>
   </div>
@@ -454,6 +473,13 @@ body.amb-open{overflow:hidden}
   <p class="foot">Sintonía reproduce los streams que cada emisora publica en sus propios servidores. Si alguna no suena, vuelve a tocarla para que pruebe otra fuente, o usa «Fuente» bajo el nombre para probar otro enlace. El título de la canción aparece cuando la emisora lo publica. Enlaces de la lista pública <a href="https://github.com/LaQuay/TDTChannels" target="_blank" rel="noopener">TDTChannels</a> y del directorio <a href="https://www.radio-browser.info" target="_blank" rel="noopener">radio-browser.info</a>. Los logos son de sus respectivas emisoras.</p>
   <p class="foot">Para tenerla como una app: en Android, menú ⋮ y «Instalar aplicación»; en iPhone, Compartir y «Añadir a pantalla de inicio».</p>
 </main>
+
+<div class="sleep-pop" id="sleepPop" role="status" aria-live="polite" inert>
+  <p class="eyebrow">Apagar en</p>
+  <div class="big" id="sleepBig">15 min</div>
+  <p class="sub" id="sleepSub"></p>
+  <button type="button" id="sleepOff">Quitar temporizador</button>
+</div>
 
 <nav class="dock" id="dock" aria-label="Cambiar de emisora">
   <button class="ibtn play" id="dockPlay" type="button" aria-label="Escuchar"></button>
@@ -947,7 +973,7 @@ function removeCustom(id){
   S.list=S.list.filter(s=>s.id!==id); S.favs.delete(id);
   store.set('favs',[...S.favs]); saveCustom();
   if(wasCur){ pauseNow(); S.cur=S.list[0]; }
-  renderGrid(); renderDots(); renderStrip(); render();
+  renderGrid(); renderStrip(); render();
 }
 $('#addForm').addEventListener('submit',e=>{
   e.preventDefault();
@@ -961,7 +987,7 @@ $('#addForm').addEventListener('submit',e=>{
   const color=PALETTE[S.list.length%PALETTE.length];
   S.list.push({id:'c'+Date.now().toString(36),name,tag:'Mi emisora',kind:'music',color,ink:'#fff',mono,url:raw,custom:true});
   saveCustom(); $('#addForm').reset();
-  renderGrid(); renderDots(); renderStrip(); render();
+  renderGrid(); renderStrip(); render();
   msg.textContent='Añadida.';
 });
 $('#npUrl').value=store.get('npProxy','')||'';
@@ -981,18 +1007,12 @@ const fmt=ms=>{
   const p=n=>String(n).padStart(2,'0');
   return hh?`${hh}:${p(mm)}:${p(ss)}`:`${mm}:${p(ss)}`;
 };
-function renderSleepOpts(){
-  const box=$('#sleepOpts'); box.replaceChildren();
-  for(const m of [15,30,45,60,90]) box.append(h('button',{type:'button',onclick:()=>setSleep(m)},m+' min'));
-  if(S.sleepEnd) box.append(h('button',{type:'button',class:'cancel',onclick:()=>setSleep(0)},'Quitar temporizador'));
-}
 function setSleep(min){
   clearInterval(S.sleepT); S.sleepT=null;
   audio.volume=S.vol;
   if(!min){ S.sleepEnd=0; }
   else{ S.sleepEnd=Date.now()+min*60000; S.sleepT=setInterval(sleepTick,1000); }
-  $('#sleepPanel').hidden=true; $('#sleepBtn').setAttribute('aria-expanded','false');
-  renderSleepOpts(); sleepTick();
+  sleepTick();
 }
 function sleepTick(){
   const label=$('#sleepLeft'), btn=$('#sleepBtn');
@@ -1001,16 +1021,31 @@ function sleepTick(){
   if(left<=0){
     clearInterval(S.sleepT); S.sleepT=null; S.sleepEnd=0;
     pauseNow(); audio.volume=S.vol;
-    label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Apagado'; renderSleepOpts(); return;
+    label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Apagado'; return;
   }
   label.hidden=false; label.textContent='Se apaga en '+fmt(left); $('#sleepLabel').textContent=fmt(left);
   btn.classList.add('on');
   if(left<=10000) audio.volume=Math.max(0,S.vol*(left/10000));
 }
+/* Cada toque en «Apagado» suma 15 min (15, 30, 45, 1 h… hasta 2 h; después se quita). */
+let sleepPopT=null;
+const minTxt=m=>m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+(m%60)+' min':'');
+function showSleepPop(m){
+  $('#sleepBig').textContent=m?minTxt(m):'Quitado';
+  $('#sleepSub').textContent=m?(m<120?'Toca «Apagado» otra vez para sumar 15 min':'Es el máximo. Un toque más y se quita.'):'El temporizador está desactivado.';
+  $('#sleepOff').hidden=!m;
+  const pop=$('#sleepPop'); pop.inert=false; pop.classList.add('show');
+  clearTimeout(sleepPopT); sleepPopT=setTimeout(()=>{ pop.classList.remove('show'); pop.inert=true; },3800);
+}
 $('#sleepBtn').addEventListener('click',()=>{
-  const p=$('#sleepPanel'); p.hidden=!p.hidden;
-  $('#sleepBtn').setAttribute('aria-expanded',String(!p.hidden));
+  const pop=$('#sleepPop');
+  const left=S.sleepEnd?Math.max(0,S.sleepEnd-Date.now()):0;
+  const base=Math.round(Math.ceil(left/60000)/15)*15;
+  if(S.sleepEnd&&!pop.classList.contains('show')){ showSleepPop(Math.ceil(left/60000)); return; }
+  const n=base>=120?0:Math.min(120,base+15);
+  setSleep(n); showSleepPop(n);
 });
+$('#sleepOff').addEventListener('click',()=>{ setSleep(0); showSleepPop(0); });
 document.addEventListener('visibilitychange',()=>{ if(S.sleepEnd) sleepTick(); });
 
 /* ---------- Volumen ---------- */
@@ -1070,10 +1105,51 @@ function markCards(){
     c.classList.toggle('live',live);
   });
 }
-function renderDots(){
-  const box=$('#dots'); box.replaceChildren();
-  S.list.forEach((st,i)=>{ box.append(h('i',{style:`left:${pos(i)}%;--c:${st.color}`,'data-id':st.id})); });
+/* Ecualizador: barras que suben y bajan mientras hay directo.
+   El navegador no deja analizar el audio de emisoras de otros servidores, así que el movimiento es una animación. */
+const viz=$('#viz'), vg=viz.getContext('2d');
+const VN=34, vLv=new Float32Array(VN), vTg=new Float32Array(VN), vPk=new Float32Array(VN);
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let vRaf=0, vNext=0, vW=0, vH=0;
+function vSize(){
+  const r=viz.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
+  vW=Math.max(1,Math.round(r.width*d)); vH=Math.max(1,Math.round(r.height*d));
+  viz.width=vW; viz.height=vH; startViz();
 }
+function vDraw(t){
+  vRaf=0;
+  const m=S.mode, live=m==='playing'&&!S.buffering, tune=m==='tuning'||(m==='playing'&&S.buffering);
+  if(t>vNext){
+    vNext=t+(live?85+Math.random()*70:140);
+    for(let i=0;i<VN;i++){
+      const shape=0.32+0.68*Math.exp(-i/VN*1.7);
+      vTg[i]=live?Math.min(1,shape*(0.2+Math.random()*0.9)):tune?0.1+0.12*(Math.sin(t/240+i*.55)+1)/2:0.05;
+    }
+  }
+  let moving=false;
+  for(let i=0;i<VN;i++){
+    const up=vTg[i]>vLv[i];
+    vLv[i]=reduceMotion?vTg[i]:vLv[i]+(vTg[i]-vLv[i])*(up?0.5:0.16);
+    if(Math.abs(vTg[i]-vLv[i])>0.008) moving=true;
+    vPk[i]=vLv[i]>vPk[i]?vLv[i]:Math.max(vLv[i],vPk[i]-0.007);
+    if(vPk[i]-vLv[i]>0.008) moving=true;
+  }
+  vg.clearRect(0,0,vW,vH);
+  const bw=vW/VN, gap=bw*0.3, w=bw-gap, rad=Math.min(w/2,6);
+  const grad=vg.createLinearGradient(0,vH,0,0);
+  grad.addColorStop(0,'rgba(255,225,74,.45)'); grad.addColorStop(1,'#FFE14A');
+  vg.globalAlpha=live?1:0.55;
+  for(let i=0;i<VN;i++){
+    const x=i*bw+gap/2, bh=Math.max(vH*0.05,vLv[i]*vH*0.88);
+    vg.fillStyle=grad; vg.beginPath(); vg.roundRect(x,vH-bh,w,bh,rad); vg.fill();
+    if(live||tune){ vg.fillStyle='rgba(255,255,255,.9)'; const py=vH-Math.max(bh,vPk[i]*vH*0.88)-vH*0.07; vg.fillRect(x,Math.max(0,py),w,Math.max(2,vH*0.03)); }
+  }
+  vg.globalAlpha=1;
+  if(!document.hidden&&!reduceMotion&&(live||tune||moving)) vRaf=requestAnimationFrame(vDraw);
+}
+function startViz(){ if(!vRaf&&vW) vRaf=requestAnimationFrame(vDraw); }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) startViz(); });
+if('ResizeObserver' in window) new ResizeObserver(vSize).observe(viz); else addEventListener('resize',vSize);
 let stripShown=null;
 function renderStrip(){
   const box=$('#strip'); box.replaceChildren();
@@ -1121,9 +1197,7 @@ function render(){
   sb.hidden=!(m==='playing'||m==='error'||(m==='paused'&&S.curUrl));
   if(!sb.hidden) sb.textContent=list.length>1&&idx>=0?`Fuente ${idx+1}/${list.length} · cambiar`:'Probar otra fuente';
 
-  const i=S.list.indexOf(st);
-  $('#needle').style.left=pos(i)+'%';
-  $$('#dots i').forEach(d=>d.classList.toggle('on',d.dataset.id===st.id));
+  startViz();
   markCards(); markStrip();
 
   document.title=(m==='playing'?(S.song||st.name)+' · ':'')+'Sintonía';
@@ -1273,7 +1347,6 @@ document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElemen
 
 /* ---------- Arranque ---------- */
 $$('[data-icon]').forEach(b=>{ b.innerHTML=ICON[b.dataset.icon]; });
-dialLabels($('#labels'));
 $('#playBtn').addEventListener('click',toggle);
 $('#prevBtn').addEventListener('click',()=>step(-1));
 $('#nextBtn').addEventListener('click',()=>step(1));
@@ -1316,7 +1389,7 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   addEventListener('load',()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
 
-renderSleepOpts(); renderDots(); renderStrip(); renderGrid(); render();
+renderStrip(); renderGrid(); render();
 openCover();
 })();
 </script>
