@@ -20,6 +20,12 @@
 <title>Sintonía</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://playerservices.streamtheworld.com">
+<link rel="preconnect" href="https://flucast09-h-cloud.flumotion.com">
+<link rel="preconnect" href="https://kissfm.kissfmradio.cires21.com">
+<link rel="preconnect" href="https://radio-atres-live.ondacero.es">
+<link rel="preconnect" href="https://rtvelivestream.rtve.es">
+<link rel="preconnect" href="https://s3.we4stream.com:2020">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.8/hls.min.js"></script>
 <style>
@@ -169,6 +175,8 @@ h1,h2,p{margin:0}
 .console[data-mode="error"] .status i{background:var(--warn)}
 @keyframes blink{from{opacity:.25}to{opacity:1}}
 .sleep-left{margin-top:8px;font:400 .75rem/1.2 var(--font-mono);letter-spacing:.04em;color:var(--needle)}
+.srcbtn{margin-top:12px;border:1px solid var(--dial-line);background:transparent;color:var(--dial-muted);border-radius:999px;padding:7px 12px;font:500 .6875rem/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.srcbtn:hover{border-color:var(--needle);color:var(--needle)}
 
 .controls{display:flex;flex-direction:column;gap:12px;width:300px}
 .ctl-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -243,18 +251,22 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .del svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
 
 .add{margin-top:36px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.add + .add{margin-top:12px}
 .add summary{cursor:pointer;padding:16px 18px;font-weight:600;list-style:none;display:flex;align-items:center;gap:10px}
 .add summary::-webkit-details-marker{display:none}
 .add summary::before{content:"+";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700}
 .add[open] summary::before{content:"–"}
 .add form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:12px;align-items:end;padding:0 18px 18px}
+#npForm{grid-template-columns:minmax(0,1fr) auto}
 .add label{display:grid;gap:6px;font-size:.8125rem;font-weight:600;color:var(--muted)}
 .add input{width:100%;min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:400 1rem/1.2 var(--font-body)}
 .add button{padding:12px 18px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);font-weight:700;cursor:pointer}
 .add .hint{grid-column:1/-1;font-size:.8125rem;color:var(--muted)}
+.add .hint a{color:inherit}
 .add .hint b{color:var(--heart);font-weight:600}
 .foot{margin-top:36px;max-width:62ch;font-size:.8125rem;line-height:1.55;color:var(--muted)}
 .foot a{color:inherit}
+.foot + .foot{margin-top:12px}
 
 /* Mini reproductor */
 .mini{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;gap:12px;background:var(--dial);color:var(--on-dial);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -12px 30px -12px rgba(4,6,40,.5);transform:translateY(110%);transition:transform .25s}
@@ -275,7 +287,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   .controls{grid-column:1/-1;width:100%}
   .console{padding:18px 16px 20px}
   .now-logo .logo{width:68px}
-  .add form{grid-template-columns:1fr}
+  .add form,#npForm{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -327,6 +339,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
             <p class="song" id="song" aria-live="polite" hidden><span data-icon="note" aria-hidden="true"></span><span class="t" id="songText"></span></p>
             <p class="status" role="status" aria-live="polite"><i></i><span id="statusText"></span></p>
             <p class="sleep-left" id="sleepLeft" hidden></p>
+            <button class="srcbtn" id="srcBtn" type="button" hidden></button>
           </div>
           <div class="controls">
             <div class="ctl-row">
@@ -370,7 +383,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     </form>
   </details>
 
-  <p class="foot">Sintonía reproduce los streams que cada emisora publica en sus propios servidores. Si alguna no suena, vuelve a tocarla para que pruebe otra fuente, o añade su enlace arriba. El título de la canción aparece cuando la emisora lo publica. Enlaces de la lista pública <a href="https://github.com/LaQuay/TDTChannels" target="_blank" rel="noopener">TDTChannels</a> y del directorio <a href="https://www.radio-browser.info" target="_blank" rel="noopener">radio-browser.info</a>. Los logos son de sus respectivas emisoras.</p>
+  <details class="add" id="npBox">
+    <summary>Títulos de canciones (opcional)</summary>
+    <form id="npForm">
+      <label for="npUrl">Dirección de tu servicio de títulos
+        <input id="npUrl" type="url" autocomplete="off" placeholder="https://sintonia-titulos.tuusuario.workers.dev">
+      </label>
+      <button type="submit">Guardar</button>
+      <p class="hint">Hay emisoras que no dejan leer el título desde una web. Con este servicio gratuito sí. Los pasos están en la carpeta <a href="https://github.com/pablomgarciac-art/sintonia/tree/main/worker" target="_blank" rel="noopener">worker</a> del repositorio. <b id="npMsg"></b></p>
+    </form>
+  </details>
+
+  <p class="foot">Sintonía reproduce los streams que cada emisora publica en sus propios servidores. Si alguna no suena, vuelve a tocarla para que pruebe otra fuente, o usa «Fuente» bajo el nombre para probar otro enlace. El título de la canción aparece cuando la emisora lo publica. Enlaces de la lista pública <a href="https://github.com/LaQuay/TDTChannels" target="_blank" rel="noopener">TDTChannels</a> y del directorio <a href="https://www.radio-browser.info" target="_blank" rel="noopener">radio-browser.info</a>. Los logos son de sus respectivas emisoras.</p>
   <p class="foot">Para tenerla como una app: en Android, menú ⋮ y «Instalar aplicación»; en iPhone, Compartir y «Añadir a pantalla de inicio».</p>
 </main>
 
@@ -409,6 +433,7 @@ const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''
 const okProto=u=>location.protocol==='https:'?/^https:/i.test(u):/^https?:/i.test(u);
 const up=u=>location.protocol==='https:'&&/^http:/i.test(u)?u.replace(/^http:/i,'https:'):u;
 const uniq=a=>[...new Set(a)];
+const isHlsUrl=u=>/\.m3u8(\?|$)/i.test(u||'');
 
 const ICON={
   play:'<svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg>',
@@ -423,10 +448,10 @@ const ICON={
 };
 
 /* ---------- Emisoras ----------
-   streams: enlaces directos, de mejor a peor (mp3 antes que aac y m3u8).
+   streams: enlaces directos, de mejor a peor.
    logos: imágenes oficiales a probar en orden; si todas fallan sale una ficha con siglas.
-   np: de dónde sale el título de la canción ({triton:'MOUNT'} = API pública de Triton Digital,
-       false = emisora hablada, sin consulta; sin definir = se intenta leer del propio stream).
+   np: de dónde sale el título de la canción ({triton:'MOUNT'} o {triton:[..]} = API pública de Triton;
+       false = emisora hablada, sin consulta; sin definir = se prueban todos los métodos).
    names / queries: para buscar un stream alternativo en radio-browser.info si todos fallan. */
 const STW='https://playerservices.streamtheworld.com/api/livestream-redirect/';
 const ATRES='https://radio-atres-live.ondacero.es/api/livestream-redirect/';
@@ -438,16 +463,16 @@ const BUILTIN=[
   {id:'ondacero',name:'Onda Cero',tag:'Noticias · Magazine',kind:'talk',domain:'ondacero.es',logos:[FB('ondacero')],color:'#FF7A00',ink:'#fff',mono:'OC',names:['onda cero','ondacero'],queries:['onda cero'],streams:[ATRES+'OCAAC.aac','https://atres-live.ondacero.es/live/ondaceroeventos1/master.m3u8'],np:false},
   {id:'c100',name:'Cadena 100',tag:'Éxitos pop',kind:'music',domain:'cadena100.es',logos:[FB('CADENA100')],color:'#00B894',ink:'#04251d',mono:'100',names:['cadena 100','cadena100'],queries:['cadena 100','cadena100'],streams:['https://cadena100-cope.flumotion.com/playlist.m3u8']},
   {id:'dial',name:'Cadena Dial',tag:'Pop latino · Baladas',kind:'music',domain:'cadenadial.com',logos:[FB('cadenadial')],color:'#D81B8F',ink:'#fff',mono:'DIAL',names:['cadena dial','cadenadial'],queries:['cadena dial'],streams:[STW+'CADENADIAL.mp3',STW+'CADENADIALAAC.aac'],np:{triton:'CADENADIAL'}},
-  {id:'europafm',name:'Europa FM',tag:'Pop · Éxitos',kind:'music',domain:'europafm.com',logos:[FB('tueuropafm')],color:'#5C6BC0',ink:'#fff',mono:'EFM',names:['europa fm','europafm'],queries:['europa fm'],streams:[ATRES+'EFMAAC.aac'],np:{triton:'EFM'}},
+  {id:'europafm',name:'Europa FM',tag:'Pop · Éxitos',kind:'music',domain:'europafm.com',logos:[FB('tueuropafm')],color:'#5C6BC0',ink:'#fff',mono:'EFM',names:['europa fm','europafm'],queries:['europa fm'],streams:[ATRES+'EFMAAC.aac'],np:{triton:['EFM','EFMAAC']}},
   {id:'kiss',name:'Kiss FM',tag:'Pop · Dance',kind:'music',domain:'kissfm.es',logos:[FB('kissfm.es')],color:'#EC407A',ink:'#fff',mono:'KISS',names:['kiss fm','kissfm'],queries:['kiss fm','kissfm'],streams:['https://kissfm.kissfmradio.cires21.com/kissfm.mp3']},
   {id:'rockfm',name:'Rock FM',tag:'Rock',kind:'music',domain:'rockfm.fm',logos:[FB('RockFM')],color:'#C62828',ink:'#fff',mono:'ROCK',names:['rock fm','rockfm'],queries:['rock fm','rockfm'],streams:['https://rockfm-cope.flumotion.com/playlist.m3u8']},
-  {id:'radiole',name:'Radiolé',tag:'Copla · Flamenco pop',kind:'music',domain:'radiole.com',logos:[FB('radiole')],color:'#26A69A',ink:'#04201c',mono:'RLE',names:['radiole'],queries:['radiole'],streams:[STW+'RADIOLE.mp3',STW+'RADIOLEAAC.aac'],np:{triton:'RADIOLE'}},
+  {id:'radiole',name:'Radiolé',tag:'Copla · Flamenco pop',kind:'music',domain:'radiole.com',logos:[FB('radiole')],color:'#26A69A',ink:'#04201c',mono:'RLE',names:['radiole'],queries:['radiole'],streams:[STW+'RADIOLEAAC.aac',STW+'RADIOLE.mp3'],np:{triton:'RADIOLE'}},
   {id:'locafm',name:'Loca FM',tag:'Dance · Electrónica',kind:'music',domain:'locafm.com',logos:[FB('LocaFmOficial')],color:'#AEEA00',ink:'#1b2500',mono:'LOCA',names:['loca fm','locafm'],queries:['loca fm','locafm'],streams:['https://s3.we4stream.com:2020/stream/locafm']},
   {id:'l40dance',name:'LOS40 Dance',tag:'Dance · Electrónica',kind:'music',domain:'los40.com',badge:'Dance',logos:[FB('los40dance')],color:'#AA00FF',ink:'#fff',mono:'40',names:['los40 dance','los 40 dance'],queries:['los40 dance','los 40 dance'],streams:[STW+'LOS40_DANCE.mp3',STW+'LOS40_DANCEAAC.aac'],np:{triton:'LOS40_DANCE'}},
   {id:'l40classic',name:'LOS40 Classic',tag:'Clásicos del pop',kind:'music',domain:'los40.com',badge:'Classic',logos:[FB('Los40Classic.Oficial')],color:'#C0A062',ink:'#1d1508',mono:'40',names:['los40 classic','los 40 classic','los40 classics','los 40 classics'],queries:['los40 classic','los 40 classic'],streams:[STW+'LOS40_CLASSIC.mp3',STW+'LOS40_CLASSICAAC.aac','https://28573.live.streamtheworld.com:443/LOS40_CLASSIC.mp3'],np:{triton:'LOS40_CLASSIC'}},
   {id:'rne',name:'Radio Nacional',tag:'Información · Cultura',kind:'talk',domain:'rtve.es',logos:[FB('radionacionalrne')],color:'#78909C',ink:'#fff',mono:'RNE',names:['radio nacional','radio nacional de espana','radio nacional rne','rne radio nacional'],queries:['radio nacional','rne'],streams:['https://rtvelivestream.rtve.es/rtvesec/rne/rne_r1_main.m3u8'],np:false},
-  {id:'radio3',name:'Radio 3',tag:'Música alternativa',kind:'music',domain:'rtve.es',logos:[FB('radio3')],color:'#29B6F6',ink:'#06222f',mono:'R3',names:['radio 3','radio3','radio 3 rne','rne radio 3'],queries:['radio 3','radio3'],streams:['https://rtvelivestream.rtve.es/rtvesec/rne/rne_r3_main.m3u8'],np:false},
-  {id:'melodia',name:'Melodía FM',tag:'Éxitos de siempre',kind:'music',domain:'melodia-fm.com',logos:[FB('tumelodiafm')],color:'#FFAB40',ink:'#2a1700',mono:'MFM',names:['melodia fm','melodiafm','melodia'],queries:['melodia fm','melodiafm'],streams:[ATRES+'MELODIA_FMAAC.aac'],np:{triton:'MELODIA_FM'}},
+  {id:'radio3',name:'Radio 3',tag:'Música alternativa',kind:'music',domain:'rtve.es',logos:[FB('radio3')],color:'#29B6F6',ink:'#06222f',mono:'R3',names:['radio 3','radio3','radio 3 rne','rne radio 3'],queries:['radio 3','radio3'],streams:['https://rtvelivestream.rtve.es/rtvesec/rne/rne_r3_main.m3u8']},
+  {id:'melodia',name:'Melodía FM',tag:'Éxitos de siempre',kind:'music',domain:'melodia-fm.com',logos:[FB('tumelodiafm')],color:'#FFAB40',ink:'#2a1700',mono:'MFM',names:['melodia fm','melodiafm','melodia'],queries:['melodia fm','melodiafm'],streams:[ATRES+'MELODIA_FMAAC.aac'],np:{triton:['MELODIA_FM','MELODIA_FMAAC']}},
   {id:'l40urban',name:'LOS40 Urban',tag:'Urban · Reggaeton',kind:'music',domain:'los40.com',badge:'Urban',logos:[FB('los40urban')],color:'#FF5252',ink:'#fff',mono:'40',names:['los40 urban','los 40 urban'],queries:['los40 urban','los 40 urban'],streams:[STW+'LOS40_URBAN.mp3',STW+'LOS40_URBANAAC.aac'],np:{triton:'LOS40_URBAN'}},
   {id:'hitfm',name:'Hit FM',tag:'Éxitos del momento',kind:'music',domain:'hitfm.es',logos:[FB('hitfm.es')],color:'#FF9100',ink:'#2a1700',mono:'HIT',names:['hit fm','hitfm'],queries:['hit fm','hitfm'],streams:['https://kissfm.kissfmradio.cires21.com/hitfm.mp3']},
   {id:'megastar',name:'MegaStar FM',tag:'Pop · Rock',kind:'music',domain:'megastar.fm',logos:[FB('MegaStarFM')],color:'#7C4DFF',ink:'#fff',mono:'MEGA',names:['megastar fm','megastar'],queries:['megastar fm','megastar'],streams:['https://megastar-cope.flumotion.com/playlist.m3u8']},
@@ -466,6 +491,7 @@ S.list=[...BUILTIN,...store.get('custom',[]).map(c=>({...c,custom:true}))];
 const lastId=store.get('last',null);
 S.cur=S.list.find(s=>s.id===lastId)||S.list[0];
 const pos=i=>((i+.5)/S.list.length*100).toFixed(2);
+const isOwn=(st,u)=>(st.streams||[]).includes(u)||u===st.url;
 
 /* ---------- Logos ---------- */
 const FAVICON=d=>`https://www.google.com/s2/favicons?domain=${d}&sz=128`;
@@ -516,30 +542,42 @@ function matchRank(n,names,own){
   if(n.includes(first)&&(own||!OTHER_BRANCH.test(n))) return 2;
   return -1;
 }
-async function apiCandidates(st){
-  const found=new Map();
-  const own=OTHER_BRANCH.test(norm(st.name));
-  for(const q of st.queries||[st.name]){
-    let rows=[];
-    try{ rows=await getJSON(`/json/stations/search?name=${encodeURIComponent(q)}&countrycode=ES&hidebroken=true&order=clickcount&reverse=true&limit=40`); }
-    catch{ continue; }
-    for(const r of rows){
-      const rank=matchRank(norm(r.name),st.names||[norm(st.name)],own);
-      if(rank<0) continue;
-      const url=up(r.url_resolved||r.url||'');
-      if(!url||!okProto(url)) continue;
-      const prev=found.get(url);
-      if(!prev||rank<prev.rank) found.set(url,{url,rank,clicks:r.clickcount||0});
+const apiInflight=new Map();
+function apiCandidates(st){
+  if(apiInflight.has(st.id)) return apiInflight.get(st.id);
+  const p=(async()=>{
+    const found=new Map();
+    const own=OTHER_BRANCH.test(norm(st.name));
+    for(const q of st.queries||[st.name]){
+      let rows=[];
+      try{ rows=await getJSON(`/json/stations/search?name=${encodeURIComponent(q)}&countrycode=ES&hidebroken=true&order=clickcount&reverse=true&limit=40`); }
+      catch{ continue; }
+      for(const r of rows){
+        const rank=matchRank(norm(r.name),st.names||[norm(st.name)],own);
+        if(rank<0) continue;
+        const url=up(r.url_resolved||r.url||'');
+        if(!url||!okProto(url)) continue;
+        const prev=found.get(url);
+        if(!prev||rank<prev.rank) found.set(url,{url,rank,clicks:r.clickcount||0,br:r.bitrate||0});
+      }
     }
-  }
-  const urls=[...found.values()].sort((a,b)=>a.rank-b.rank||b.clicks-a.clicks).slice(0,6).map(x=>x.url);
-  if(urls.length) store.set('cand.'+st.id,{t:Date.now(),urls});
-  return urls;
+    const urls=[...found.values()].sort((a,b)=>a.rank-b.rank||b.br-a.br||b.clicks-a.clicks).slice(0,6).map(x=>x.url);
+    if(urls.length) store.set('cand.'+st.id,{t:Date.now(),urls});
+    return urls;
+  })().finally(()=>setTimeout(()=>apiInflight.delete(st.id),1000));
+  apiInflight.set(st.id,p);
+  return p;
+}
+function cachedCandidates(st){
+  const c=store.get('cand.'+st.id,null);
+  return (c&&Date.now()-c.t<216e5)?c.urls:[];
 }
 function initialUrls(st){
-  const c=store.get('cand.'+st.id,null);
-  const cached=(c&&Date.now()-c.t<216e5)?c.urls:[];
-  return uniq([store.get('good.'+st.id,null),...(st.streams||[]),st.url,...cached].filter(Boolean).map(up)).filter(okProto);
+  const g=store.get('good.'+st.id,null);
+  return uniq([store.get('pref.'+st.id,null),isOwn(st,g)?g:null,...(st.streams||[]),st.url,...cachedCandidates(st)].filter(Boolean).map(up)).filter(okProto);
+}
+function sourceList(st){
+  return uniq([...(st.streams||[]),st.url,...cachedCandidates(st)].filter(Boolean).map(up)).filter(okProto);
 }
 
 /* ---------- Reproducción ---------- */
@@ -549,25 +587,39 @@ function killMedia(){
 }
 function startMedia(url,cb){
   killMedia();
-  const isHls=/\.m3u8(\?|$)/i.test(url);
   const onPlayErr=e=>{ if(e&&e.name==='NotAllowedError') cb.blocked(); else if(!e||e.name!=='AbortError') cb.fail(); };
-  if(isHls&&window.Hls&&Hls.isSupported()){
+  if(isHlsUrl(url)&&window.Hls&&Hls.isSupported()){
     const hls=new Hls({enableWorker:true}); S.hls=hls;
     hls.on(Hls.Events.ERROR,(_,d)=>{ if(d.fatal) cb.fail(); });
     hls.on(Hls.Events.MANIFEST_PARSED,()=>audio.play().catch(onPlayErr));
+    hls.on(Hls.Events.FRAG_PARSING_METADATA,(_,d)=>{ for(const s of (d.samples||[])){ const t=id3Song(s.data); if(t) onHlsSong(t); } });
     hls.loadSource(url); hls.attachMedia(audio);
   }else{
     audio.src=url;
     audio.play().catch(onPlayErr);
   }
 }
-function attempt(url){
+/* Prueba un enlace. Si el servidor no manda ni un byte en 3 s se descarta rápido;
+   en la última pasada (patient) se espera hasta 12 s. */
+function attempt(url,{patient=false}={}){
   return new Promise(resolve=>{
-    let done=false;
-    const finish=r=>{ if(done) return; done=true; clearTimeout(timer); audio.removeEventListener('playing',onPlay); audio.removeEventListener('error',onErr); resolve(r); };
-    const onPlay=()=>finish('ok'), onErr=()=>finish('fail');
-    const timer=setTimeout(()=>finish('fail'),8000);
+    let done=false, got=false;
+    const hls=isHlsUrl(url);
+    const evs=['progress','loadedmetadata','loadeddata','canplay'];
+    const finish=r=>{
+      if(done) return; done=true;
+      clearTimeout(hard); clearTimeout(fast);
+      audio.removeEventListener('playing',onPlay); audio.removeEventListener('error',onErr);
+      evs.forEach(e=>audio.removeEventListener(e,onData));
+      resolve(r);
+    };
+    const onPlay=()=>{ if(!S.hls&&audio.getAttribute('src')!==url) return; finish('ok'); };
+    const onErr=()=>finish('fail');
+    const onData=()=>{ got=true; };
+    const hard=setTimeout(()=>finish('fail'),patient?12000:7000);
+    const fast=setTimeout(()=>{ if(!got&&!hls&&!patient) finish('fail'); },3200);
     audio.addEventListener('playing',onPlay); audio.addEventListener('error',onErr);
+    evs.forEach(e=>audio.addEventListener(e,onData));
     try{ startMedia(url,{fail:()=>finish('fail'),blocked:()=>finish('blocked')}); }catch{ finish('fail'); }
   });
 }
@@ -580,33 +632,36 @@ async function tune(st,{auto=false}={}){
 
   const bad=S.bad.get(st.id)||new Set(); S.bad.set(st.id,bad);
   const tried=new Set();
-  const run=async urls=>{
-    const ordered=[...urls.filter(u=>!bad.has(u)),...urls.filter(u=>bad.has(u))];
+  // Si la emisora tiene un solo enlace, ya vamos buscando alternativas mientras se prueba el primero.
+  const apiP=(!st.custom&&(st.streams||[]).length<2)?apiCandidates(st).catch(()=>[]):null;
+  const run=async(urls,patient=false)=>{
+    const ordered=patient?urls:[...urls.filter(u=>!bad.has(u)),...urls.filter(u=>bad.has(u))];
     for(const u of ordered){
-      if(tried.has(u)) continue;
+      if(!patient&&tried.has(u)) continue;
       tried.add(u);
-      const r=await attempt(u);
+      const r=await attempt(u,{patient});
       if(token!==S.token) return 'stale';
-      if(r==='ok'){ store.set('good.'+st.id,u); S.curUrl=u; bad.clear(); }
+      if(r==='ok'){ S.curUrl=u; bad.clear(); if(isOwn(st,u)) store.set('good.'+st.id,u); }
       else if(r==='fail') bad.add(u);
       if(r!=='fail') return r;
     }
     return 'fail';
   };
-  let res=await run(initialUrls(st));
+  const first=initialUrls(st);
+  let res=await run(first);
   if(res==='fail'&&!st.custom){
-    let more=[];
-    try{ more=await apiCandidates(st); }catch{}
+    let more=[]; try{ more=await (apiP||apiCandidates(st)); }catch{}
     if(token!==S.token) return;
     res=await run(more);
   }
+  if(res==='fail'&&first.length&&token===S.token) res=await run(first.slice(0,1),true);
   if(res==='stale'||token!==S.token) return;
   S.attempting=false;
   if(res==='ok'){ S.mode='playing'; startNow(); }
   else{
     killMedia();
     if(res==='blocked'){ S.mode='paused'; S.ready=true; }
-    else{ S.mode='error'; store.set('good.'+st.id,null); store.set('cand.'+st.id,null); }
+    else{ S.mode='error'; store.set('good.'+st.id,null); store.set('pref.'+st.id,null); store.set('cand.'+st.id,null); }
   }
   render();
 }
@@ -625,6 +680,18 @@ function reconnect(){
   if(S.retries++<4) tune(S.cur,{auto:true});
   else{ stopNow(); S.mode='error'; killMedia(); render(); }
 }
+/* Cambiar de fuente a mano: para probar otro enlace de la misma emisora si suena mal o tarda. */
+async function nextSource(){
+  const st=S.cur;
+  let list=sourceList(st);
+  if(list.length<2&&!st.custom){ try{ await apiCandidates(st); }catch{} list=sourceList(st); }
+  if(!list.length) return;
+  const i=list.indexOf(S.curUrl);
+  const nxt=list[(i+1)%list.length];
+  if(list.length<2&&nxt===S.curUrl){ $('#srcBtn').textContent='No hay otra fuente'; return; }
+  store.set('pref.'+st.id,nxt);
+  tune(st);
+}
 audio.addEventListener('playing',()=>{ clearTimeout(S.waitT); if(S.buffering){ S.buffering=false; render(); } });
 audio.addEventListener('waiting',()=>{
   if(S.mode!=='playing') return;
@@ -635,13 +702,21 @@ audio.addEventListener('error',()=>{ if(S.mode==='playing'&&!S.attempting) recon
 audio.addEventListener('ended',()=>{ if(S.mode==='playing'&&!S.attempting) reconnect(); });
 audio.addEventListener('pause',()=>{ if(S.mode==='playing'&&audio.getAttribute('src')){ stopNow(); S.mode='paused'; render(); } });
 
-/* ---------- Título de la canción ---------- */
-let npTimer=null, npAbort=null, npRun=0;
-const npFails=new Map(), tritonDown=new Set();
+/* ---------- Título de la canción ----------
+   Se prueba, por orden: tu servicio de títulos (si lo configuras), la API de Triton, los metadatos
+   del propio stream (ICY), Icecast y AzuraCast. En las emisoras HLS se leen las etiquetas ID3. */
+let npTimer=null, npAbort=null, npRun=0, npBackoff=0;
+const npDown=new Set();
 const cleanSong=s=>String(s||'').replace(/\s+/g,' ').replace(/^[-–—\s]+|[-–—\s]+$/g,'').trim();
+const joinSong=(artist,title)=>{
+  artist=cleanSong(artist); title=cleanSong(title);
+  if(!title) return null;
+  return artist&&!title.toLowerCase().includes(artist.toLowerCase())?`${artist} — ${title}`:title;
+};
+const NP_PROXY=()=>String(store.get('npProxy','')||'').replace(/\/+$/,'');
 function setSong(t){
   S.song=t||'';
-  $('#song').hidden=!S.song;
+  $('#song').hidden=!(S.song&&S.mode==='playing');
   $('#songText').textContent=S.song; $('#songText').title=S.song;
   $('#miniStatus').textContent=(S.song&&S.mode==='playing')?S.song:statusText();
   document.title=(S.mode==='playing'?(S.song||S.cur.name)+' · ':'')+'Sintonía';
@@ -657,21 +732,27 @@ function timedFetch(url,opts={},ms=7000){
   const t=setTimeout(()=>ctl.abort(),ms);
   return fetch(url,{...opts,signal:ctl.signal,cache:'no-store'}).finally(()=>clearTimeout(t));
 }
+async function proxySong(url){
+  const base=NP_PROXY();
+  if(!base||!url||isHlsUrl(url)) return null;
+  const r=await timedFetch(`${base}?url=${encodeURIComponent(url)}`,{},10000);
+  if(!r.ok) throw new Error('servicio de títulos');
+  const j=await r.json();
+  return cleanSong(j.title)||null;
+}
 async function tritonSong(mount){
   const r=await timedFetch(`https://np.tritondigital.com/public/nowplaying?mountName=${encodeURIComponent(mount)}&numberToFetch=1&eventType=track`);
   if(!r.ok) throw new Error('triton');
   const xml=new DOMParser().parseFromString(await r.text(),'text/xml');
   const p={};
   xml.querySelectorAll('property').forEach(e=>{ p[e.getAttribute('name')]=(e.textContent||'').trim(); });
-  const title=cleanSong(p.cue_title), artist=cleanSong(p.track_artist_name);
-  if(!title) return null;
-  return artist&&!title.toLowerCase().includes(artist.toLowerCase())?`${artist} — ${title}`:title;
+  return joinSong(p.track_artist_name,p.cue_title);
 }
 async function icySong(url){
-  if(!url||/\.m3u8(\?|$)/i.test(url)) return null;
+  if(!url||isHlsUrl(url)) return null;
   const r=await timedFetch(url,{headers:{'Icy-MetaData':'1'}},9000);
   const mi=parseInt(r.headers.get('icy-metaint')||'0',10);
-  if(!mi||mi>65536||!r.body) return null;
+  if(!mi||mi>65536||!r.body) throw new Error('sin metadatos ICY');
   const rd=r.body.getReader();
   let buf=new Uint8Array(0);
   for(;;){
@@ -684,29 +765,95 @@ async function icySong(url){
   const L=buf[mi]*16;
   const txt=new TextDecoder('utf-8').decode(buf.slice(mi+1,mi+1+L));
   const m=/StreamTitle='(.*?)';/.exec(txt);
-  return m?cleanSong(m[1]):null;
+  return m?cleanSong(m[1])||null:null;
+}
+async function icecastSong(url){
+  if(!url||isHlsUrl(url)) return null;
+  const u=new URL(url);
+  const r=await timedFetch(u.origin+'/status-json.xsl',{},6000);
+  if(!r.ok) throw new Error('icecast');
+  const j=await r.json();
+  let src=j.icestats&&j.icestats.source;
+  if(!src) return null;
+  if(!Array.isArray(src)) src=[src];
+  const m=src.find(s=>String(s.listenurl||'').endsWith(u.pathname))||src[0];
+  return joinSong(m.artist,m.title);
+}
+async function azuraSong(url){
+  if(!url||isHlsUrl(url)) return null;
+  const u=new URL(url);
+  const seg=u.pathname.split('/').filter(Boolean);
+  const short=(seg[0]==='listen'||seg[0]==='stream')?seg[1]:null;
+  if(!short) return null;
+  const r=await timedFetch(`${u.origin}/api/nowplaying/${encodeURIComponent(short)}`,{},6000);
+  if(!r.ok) throw new Error('azuracast');
+  const j=await r.json();
+  const s=j&&j.now_playing&&j.now_playing.song;
+  return s?joinSong(s.artist,s.title):null;
 }
 async function fetchSong(st){
-  if(st.np&&st.np.triton&&!tritonDown.has(st.id)){
-    try{ return await tritonSong(st.np.triton); }catch{ tritonDown.add(st.id); }
+  const url=S.curUrl;
+  const steps=[];
+  if(NP_PROXY()) steps.push(['proxy',()=>proxySong(url)]);
+  for(const m of [].concat((st.np&&st.np.triton)||[])) steps.push(['triton:'+m,()=>tritonSong(m)]);
+  steps.push(['icy',()=>icySong(url)],['icecast',()=>icecastSong(url)],['azura',()=>azuraSong(url)]);
+  for(const [k,fn] of steps){
+    const key=st.id+':'+k;
+    if(npDown.has(key)) continue;
+    try{ const t=await fn(); if(t) return t; }
+    catch(e){ if(!(e&&e.name==='AbortError')) npDown.add(key); }
   }
-  return icySong(S.curUrl);
+  return null;
 }
 function startNow(){
   stopNow();
   const st=S.cur;
   if(st.np===false||S.mode!=='playing') return;
   const run=npRun;
+  npBackoff=0;
   const loop=async()=>{
     if(run!==npRun||S.mode!=='playing') return;
     let t=null;
     try{ t=await fetchSong(st); }catch{}
     if(run!==npRun) return;
-    if(t&&norm(t)!==norm(st.name)){ npFails.set(st.id,0); if(t!==S.song) setSong(t); }
-    else if(!t){ const n=(npFails.get(st.id)||0)+1; npFails.set(st.id,n); if(n>=3&&!S.song) return; }
-    npTimer=setTimeout(loop,18000);
+    if(t&&norm(t)!==norm(st.name)){ npBackoff=0; if(t!==S.song) setSong(t); }
+    else npBackoff=Math.min(npBackoff+1,4);
+    npTimer=setTimeout(loop,npBackoff>=3?45000:15000);
   };
   npTimer=setTimeout(loop,1500);
+}
+/* Etiquetas ID3 de los streams HLS */
+function id3Text(b,skipDesc){
+  const enc=b[0], bytes=b.subarray(1);
+  let s;
+  if(enc===1||enc===2) s=new TextDecoder(enc===1?'utf-16':'utf-16be').decode(bytes);
+  else s=new TextDecoder(enc===3?'utf-8':'iso-8859-1').decode(bytes);
+  s=s.replace(/\0+$/,'');
+  if(skipDesc){ const i=s.indexOf('\0'); if(i>=0) s=s.slice(i+1); }
+  return cleanSong(s.replace(/\0/g,' '));
+}
+function id3Song(u8){
+  try{
+    if(!u8||u8.length<10||u8[0]!==0x49||u8[1]!==0x44||u8[2]!==0x33) return null;
+    const ver=u8[3];
+    const size=((u8[6]&127)<<21)|((u8[7]&127)<<14)|((u8[8]&127)<<7)|(u8[9]&127);
+    const end=Math.min(u8.length,10+size);
+    let p=10, title='', artist='';
+    while(p+10<=end){
+      const id=String.fromCharCode(u8[p],u8[p+1],u8[p+2],u8[p+3]);
+      if(!/^[A-Z0-9]{4}$/.test(id)) break;
+      const fs=ver===4?(((u8[p+4]&127)<<21)|((u8[p+5]&127)<<14)|((u8[p+6]&127)<<7)|(u8[p+7]&127)):(u8[p+4]*16777216+(u8[p+5]<<16)+(u8[p+6]<<8)+u8[p+7]);
+      const body=u8.subarray(p+10,p+10+fs); p+=10+fs;
+      if(!fs) continue;
+      if(id==='TIT2') title=id3Text(body);
+      else if(id==='TPE1') artist=id3Text(body);
+    }
+    return joinSong(artist,title);
+  }catch{ return null; }
+}
+function onHlsSong(t){
+  if(!S.cur||norm(t)===norm(S.cur.name)||t===S.song) return;
+  if(S.mode==='playing'||S.mode==='tuning') setSong(t);
 }
 
 /* ---------- Favoritas ---------- */
@@ -739,6 +886,16 @@ $('#addForm').addEventListener('submit',e=>{
   saveCustom(); $('#addForm').reset();
   renderGrid(); renderDots(); render();
   msg.textContent='Añadida.';
+});
+$('#npUrl').value=store.get('npProxy','')||'';
+$('#npForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=$('#npUrl').value.trim(), msg=$('#npMsg');
+  if(v&&!/^https:\/\//i.test(v)){ msg.textContent='La dirección debe empezar por https://'; return; }
+  store.set('npProxy',v.replace(/\/+$/,''));
+  npDown.clear();
+  msg.textContent=v?'Guardado.':'Quitado.';
+  if(S.mode==='playing') startNow();
 });
 
 /* ---------- Temporizador de apagado ---------- */
@@ -865,6 +1022,11 @@ function render(){
   fb.setAttribute('aria-pressed',String(fav));
   fb.setAttribute('aria-label',fav?'Quitar de favoritas':'Añadir a favoritas');
 
+  const sb=$('#srcBtn');
+  const list=sourceList(st), idx=list.indexOf(S.curUrl);
+  sb.hidden=!(m==='playing'||m==='error'||(m==='paused'&&S.curUrl));
+  if(!sb.hidden) sb.textContent=list.length>1&&idx>=0?`Fuente ${idx+1}/${list.length} · cambiar`:'Probar otra fuente';
+
   const i=S.list.indexOf(st);
   $('#needle').style.left=pos(i)+'%';
   $$('#dots i').forEach(d=>d.classList.toggle('on',d.dataset.id===st.id));
@@ -872,7 +1034,7 @@ function render(){
 
   document.title=(m==='playing'?(S.song||st.name)+' · ':'')+'Sintonía';
   mediaSession();
-  const cg=$('#coverGo'); if(cg&&!$('#cover').hidden) setCoverButton();
+  if(!$('#cover').hidden) setCoverButton();
 }
 function mediaSession(){
   if(!('mediaSession' in navigator)||!S.cur) return;
@@ -931,6 +1093,7 @@ $('#miniPlay').addEventListener('click',toggle);
 $('#prevBtn').addEventListener('click',()=>step(-1));
 $('#nextBtn').addEventListener('click',()=>step(1));
 $('#favBtn').addEventListener('click',()=>toggleFav(S.cur.id));
+$('#srcBtn').addEventListener('click',nextSource);
 $('#miniInfo').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
 
 document.addEventListener('keydown',e=>{
