@@ -213,8 +213,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .ctl-row.rowmain{justify-content:center;gap:22px;width:100%}
 .ctl-row.rowmain .ibtn:not(.play){width:50px;height:50px}
 .side{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:56px;height:56px;padding:0;border-radius:16px;border:1px solid var(--dial-line);background:rgba(255,255,255,.06);color:var(--on-dial);font:700 .625rem/1 var(--font-body);letter-spacing:.01em;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.now .song[hidden]{display:flex!important;visibility:hidden}
+.now .srcbtn[hidden]{display:inline-flex!important;visibility:hidden}
+.srcbtn{display:inline-flex;align-items:center;height:30px;padding:0 12px}
+#sleepLeft{display:none!important}
+.song{min-height:1.3em}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.fabs{position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:12px}
+.fabs{position:absolute;right:10px;top:15%;z-index:3;display:flex;flex-direction:column;gap:12px}
 .fab{position:relative;width:46px;height:46px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--on-dial);cursor:pointer;box-shadow:0 8px 20px -8px rgba(0,0,0,.65);transition:background .15s,border-color .15s,color .15s}
 .fab:hover{background:rgba(255,255,255,.16)}
 .fab svg{width:22px;height:22px}
@@ -385,11 +390,11 @@ body.amb-open{overflow:hidden}
 @media (max-width:760px){
   .now{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:12px}
   .viz{grid-row:auto;width:calc(100% - 104px)}
-  .now>div:nth-child(2){display:flex;flex-direction:column;align-items:center;width:100%}
+  .now>div:nth-of-type(2){display:flex;flex-direction:column;align-items:center;width:100%;min-width:0}
   .song,.status{justify-content:center;max-width:100%}
   .console{padding:16px 16px 20px}
   .controls{grid-column:1/-1;width:100%}
-  .now-logo .logo{width:clamp(76px,calc(100svh - 545px),min(46vw,190px));border-radius:26px}
+  .now-logo .logo{width:clamp(76px,calc(100svh - 580px),min(46vw,190px));border-radius:26px}
   .now-name{font-size:clamp(1.6rem,7vw,2.2rem)}
   .add form,#npForm{grid-template-columns:1fr}
 }
