@@ -43,6 +43,7 @@
   --dial:#0A0F2C; --on-dial:#E9ECFF; --dial-muted:#8993D2; --dial-line:#252D69; --tick:#4A57B4;
   --needle:#FFE14A; --needle-glow:rgba(255,225,74,.45); --on-needle:#0A0F2C;
   --heart:#FF3D6E; --live:#35E08A; --warn:#FFB020;
+  --dock:calc(96px + env(safe-area-inset-bottom,0px));
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
@@ -70,7 +71,7 @@ body.cover-open{overflow:hidden}
 html{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
 /* App instalada: la barra de estado del móvil queda pintada del color de la portada */
 body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--hero);z-index:50;pointer-events:none}
-.cover,.card-main,.ibtn,.chip,.mini{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.cover,.card-main,.ibtn,.chip,.chip-st{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 button{font:inherit;color:inherit;touch-action:manipulation}
 h1,h2,p{margin:0}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -114,20 +115,24 @@ h1,h2,p{margin:0}
 
 /* ---------- Portada del reproductor ---------- */
 .hero{
+  display:flex;flex-direction:column;min-height:100vh;min-height:100svh;
   background-color:var(--hero);
   background-image:repeating-radial-gradient(circle at 100% 0,transparent 0 26px,var(--ring) 26px 27px);
   color:var(--on-hero);
-  padding-top:calc(env(safe-area-inset-top,0px) + clamp(28px,6vw,56px));
+  padding-top:calc(env(safe-area-inset-top,0px) + 12px);
+  padding-bottom:calc(var(--dock) + 12px);
 }
-.brand{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 32px}
-.wordmark{font-family:var(--font-display);font-weight:800;font-size:clamp(2.6rem,11.5vw,7.25rem);letter-spacing:-.045em;line-height:.95}
-.tagline{max-width:30ch;font-size:1.0625rem;line-height:1.4;padding-bottom:.6rem;text-wrap:balance}
-.count{display:block;margin-top:8px;font:500 .8125rem/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.hero>.wrap{width:100%;flex:1;display:flex;flex-direction:column}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:2px 4px 0}
+.wordmark{font-family:var(--font-display);font-weight:800;font-size:1.5rem;letter-spacing:-.04em;line-height:1}
 
-.console-wrap{position:relative;z-index:2;margin-top:clamp(24px,5vw,44px);margin-bottom:-72px}
+.count{font:500 .6875rem/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+
+.console-wrap{position:relative;z-index:2;flex:1;display:flex;margin-top:12px}
 .console{
-  position:relative;overflow:hidden;background:var(--dial);color:var(--on-dial);
-  border-radius:22px;padding:22px 22px 24px;
+  position:relative;overflow:hidden;background:var(--dial);color:var(--on-dial);width:100%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  border-radius:24px;padding:20px 20px 22px;
   box-shadow:0 30px 60px -28px rgba(4,6,40,.75),inset 0 1px 0 rgba(255,255,255,.07);
 }
 .console::after{content:"";position:absolute;inset:0 0 58% 0;background:linear-gradient(180deg,rgba(255,255,255,.055),transparent);pointer-events:none}
@@ -157,7 +162,7 @@ h1,h2,p{margin:0}
 @keyframes seek{from{transform:translateX(-4px)}to{transform:translateX(4px)}}
 
 /* Ahora suena */
-.now{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px 22px;align-items:center}
+.now{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px 22px;align-items:center;flex:1;align-content:center}
 .now-logo .logo{width:84px;aspect-ratio:1;border-radius:16px;border:0}
 .now-logo .logo img.ico{width:62%}
 .now-logo .mono{font-size:1.35rem}
@@ -214,7 +219,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .sleep-opts button.cancel{border-color:transparent;color:var(--dial-muted);text-decoration:underline;text-underline-offset:3px}
 
 /* ---------- Emisoras ---------- */
-.main{padding-top:116px;padding-bottom:120px}
+.main{padding-top:28px;padding-bottom:calc(var(--dock) + 28px)}
 .section-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px 24px;margin-bottom:18px}
 .section-head h2{font-family:var(--font-display);font-weight:600;font-size:1.375rem;letter-spacing:-.02em}
 .filters{display:flex;flex-wrap:wrap;gap:8px}
@@ -228,6 +233,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .card .logo{width:100%;aspect-ratio:1;border-radius:10px}
 .card .logo img.ico{width:54%}
 .card .logo .badge{left:4px;bottom:4px;font-size:.5625rem;padding:2px 4px}
+.card .logo .mono{font-size:1.05rem}
 .card .eq{right:4px;bottom:4px;height:16px;padding:3px 4px}
 .card:hover{border-color:var(--accent);transform:translateY(-2px)}
 .card.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
@@ -239,8 +245,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 
 .logo{position:relative;display:grid;place-items:center;aspect-ratio:16/10;border-radius:10px;background:#fff;overflow:hidden;border:1px solid var(--line)}
 .logo img.ico{width:44%;max-height:72%;object-fit:contain}
-.logo img.full{height:100%;width:auto;aspect-ratio:1;max-width:none;object-fit:cover}
-.now-logo .logo img.full,.mini .logo img.full{width:100%;height:100%}
+.logo img.full{width:100%;height:100%;max-width:none;object-fit:contain;padding:5%}
+
 .logo .mono{position:absolute;inset:0;display:grid;place-items:center;background:var(--c);color:var(--ci);font:800 clamp(1.4rem,6vw,1.9rem)/1 var(--font-display);letter-spacing:-.03em}
 .logo .badge{position:absolute;left:6px;bottom:6px;font:500 .625rem/1 var(--font-mono);letter-spacing:.08em;background:var(--ink);color:var(--bg);padding:3px 5px;border-radius:4px;text-transform:uppercase}
 .eq{position:absolute;right:6px;bottom:6px;display:none;align-items:flex-end;gap:2px;height:20px;padding:4px 5px;border-radius:6px;background:var(--accent)}
@@ -277,21 +283,20 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .foot a{color:inherit}
 .foot + .foot{margin-top:12px}
 
-/* Mini reproductor flotante */
-.mini{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:30;width:min(760px,calc(100% - 24px));display:flex;align-items:center;gap:8px;background:var(--dial);color:var(--on-dial);padding:10px 12px 10px 10px;border-radius:26px;border:1px solid var(--dial-line);box-shadow:0 20px 44px -10px rgba(4,6,40,.7),inset 0 1px 0 rgba(255,255,255,.07);transform:translate(-50%,170%);transition:transform .3s cubic-bezier(.3,.8,.2,1)}
-.mini.show{transform:translate(-50%,0)}
-.mini-info{all:unset;box-sizing:border-box;flex:1;min-width:0;display:flex;align-items:center;gap:12px;cursor:pointer}
-.mini-info:focus-visible{outline:3px solid var(--needle);outline-offset:2px;border-radius:12px}
-.mini .logo{width:58px;aspect-ratio:1;border-radius:14px;border:0;flex:none}
-.mini .logo img.ico{width:62%}
-.mini .mono{font-size:.9rem}
-.mini-text{min-width:0;display:block}
-.mini-name{display:block;font:700 1.0625rem/1.2 var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini-status{display:block;margin-top:2px;font:500 .75rem/1.3 var(--font-mono);letter-spacing:.04em;color:var(--dial-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini.song-on .mini-status{color:var(--needle);text-transform:none}
-.mini .ibtn{width:44px;height:44px}
-.mini .ibtn.play{width:58px;height:58px;box-shadow:0 0 0 4px var(--needle-glow)}
-.mini .ibtn.play svg{width:26px;height:26px}
+/* Dock inferior: play + carrusel de emisoras */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;background:var(--dial);color:var(--on-dial);border-top:1px solid var(--dial-line);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
+.dock .ibtn.play{width:58px;height:58px;flex:none;margin-right:8px;box-shadow:0 0 0 4px var(--needle-glow)}
+.dock .ibtn.play svg{width:26px;height:26px}
+.strip{position:relative;flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px 18px 4px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 26px),transparent)}
+.strip::-webkit-scrollbar{display:none}
+.chip-st{all:unset;box-sizing:border-box;flex:none;width:64px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;scroll-snap-align:center;font:600 .625rem/1.1 var(--font-body);color:var(--dial-muted);text-align:center;-webkit-tap-highlight-color:transparent}
+.chip-st:focus-visible{outline:3px solid var(--needle);outline-offset:2px;border-radius:14px}
+.chip-st .logo{width:58px;aspect-ratio:1;border-radius:14px;border:2px solid transparent}
+.chip-st .logo .badge{display:none}
+.chip-st .mono{font-size:.9rem}
+.chip-st span{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip-st.on{color:var(--needle)}
+.chip-st.on .logo{border-color:var(--needle);box-shadow:0 0 0 3px var(--needle-glow)}
 
 /* Modo pantalla (stand-by con colores) */
 body.amb-open{overflow:hidden}
@@ -316,12 +321,15 @@ body.amb-open{overflow:hidden}
 .amb .ibtn{border-color:currentColor;color:inherit;width:56px;height:56px}
 .amb .ibtn.play{width:76px;height:76px;background:#fff;color:#0A0F2C;border:0;box-shadow:none}
 
-@media (max-width:400px){ .mini{gap:4px;padding-right:8px} .mini .ibtn{width:38px;height:38px} .mini .logo{width:50px} .mini-info{gap:9px} .pill{font-size:.875rem;gap:6px} .pill svg{width:20px;height:20px} }
+@media (max-width:400px){ .pill{font-size:.875rem;gap:6px} .pill svg{width:20px;height:20px} }
 @media (max-width:760px){
-  .now{grid-template-columns:auto minmax(0,1fr)}
+  .now{grid-template-columns:1fr;justify-items:center;text-align:center;gap:14px}
+  .now>div:nth-child(2){display:flex;flex-direction:column;align-items:center;width:100%}
+  .song,.status{justify-content:center;max-width:100%}
+  .console{padding:16px 16px 20px}
   .controls{grid-column:1/-1;width:100%}
-  .console{padding:18px 16px 20px}
-  .now-logo .logo{width:68px}
+  .now-logo .logo{width:min(46vw,190px);border-radius:26px}
+  .now-name{font-size:clamp(1.6rem,7vw,2.2rem)}
   .add form,#npForm{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
@@ -355,7 +363,7 @@ body.amb-open{overflow:hidden}
   <div class="wrap">
     <div class="brand">
       <h1 class="wordmark">Sintonía</h1>
-      <p class="tagline">Las emisoras más escuchadas de España, en directo.<span class="count" id="count"></span></p>
+      <span class="count" id="count"></span>
     </div>
 
     <section class="console-wrap" aria-label="Reproductor">
@@ -436,15 +444,10 @@ body.amb-open{overflow:hidden}
   <p class="foot">Para tenerla como una app: en Android, menú ⋮ y «Instalar aplicación»; en iPhone, Compartir y «Añadir a pantalla de inicio».</p>
 </main>
 
-<div class="mini" id="mini" inert>
-  <button class="mini-info" id="miniInfo" type="button" aria-label="Volver al reproductor">
-    <span id="miniLogo"></span>
-    <span class="mini-text"><span class="mini-name" id="miniName"></span><span class="mini-status" id="miniStatus"></span></span>
-  </button>
-  <button class="ibtn" id="miniPrev" type="button" aria-label="Emisora anterior" data-icon="prev"></button>
-  <button class="ibtn play" id="miniPlay" type="button" aria-label="Escuchar"></button>
-  <button class="ibtn" id="miniNext" type="button" aria-label="Emisora siguiente" data-icon="next"></button>
-</div>
+<nav class="dock" id="dock" aria-label="Cambiar de emisora">
+  <button class="ibtn play" id="dockPlay" type="button" aria-label="Escuchar"></button>
+  <div class="strip" id="strip"></div>
+</nav>
 
 <div class="amb" id="amb" hidden role="dialog" aria-label="Modo pantalla">
   <div class="amb-bg" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -774,8 +777,6 @@ function setSong(t){
   S.song=t||'';
   $('#song').hidden=!(S.song&&S.mode==='playing');
   $('#songText').textContent=S.song; $('#songText').title=S.song;
-  $('#miniStatus').textContent=(S.song&&S.mode==='playing')?S.song:statusText();
-  $('#mini').classList.toggle('song-on',!!(S.song&&S.mode==='playing'));
   document.title=(S.mode==='playing'?(S.song||S.cur.name)+' · ':'')+'Sintonía';
   mediaSession();
   paintAmb();
@@ -928,7 +929,7 @@ function removeCustom(id){
   S.list=S.list.filter(s=>s.id!==id); S.favs.delete(id);
   store.set('favs',[...S.favs]); saveCustom();
   if(wasCur){ pauseNow(); S.cur=S.list[0]; }
-  renderGrid(); renderDots(); render();
+  renderGrid(); renderDots(); renderStrip(); render();
 }
 $('#addForm').addEventListener('submit',e=>{
   e.preventDefault();
@@ -942,7 +943,7 @@ $('#addForm').addEventListener('submit',e=>{
   const color=PALETTE[S.list.length%PALETTE.length];
   S.list.push({id:'c'+Date.now().toString(36),name,tag:'Mi emisora',kind:'music',color,ink:'#fff',mono,url:raw,custom:true});
   saveCustom(); $('#addForm').reset();
-  renderGrid(); renderDots(); render();
+  renderGrid(); renderDots(); renderStrip(); render();
   msg.textContent='Añadida.';
 });
 $('#npUrl').value=store.get('npProxy','')||'';
@@ -1055,6 +1056,20 @@ function renderDots(){
   const box=$('#dots'); box.replaceChildren();
   S.list.forEach((st,i)=>{ box.append(h('i',{style:`left:${pos(i)}%;--c:${st.color}`,'data-id':st.id})); });
 }
+let stripShown=null;
+function renderStrip(){
+  const box=$('#strip'); box.replaceChildren();
+  for(const st of S.list) box.append(h('button',{class:'chip-st',type:'button','data-id':st.id,'aria-label':'Sintonizar '+st.name,onclick:()=>onPick(st)},logo(st),h('span',{},st.name)));
+  stripShown=null; markStrip();
+}
+function markStrip(){
+  const box=$('#strip'); let cur=null;
+  $$('.chip-st',box).forEach(b=>{ const on=b.dataset.id===S.cur.id; b.classList.toggle('on',on); if(on) cur=b; });
+  if(cur&&stripShown!==S.cur.id){
+    stripShown=S.cur.id;
+    box.scrollTo({left:cur.offsetLeft-(box.clientWidth-cur.offsetWidth)/2,behavior:'smooth'});
+  }
+}
 let shownId=null;
 function render(){
   const st=S.cur, m=S.mode;
@@ -1064,15 +1079,13 @@ function render(){
   if(shownId!==st.id){
     shownId=st.id;
     $('#nowLogo').replaceChildren(logo(st));
-    $('#miniLogo').replaceChildren(logo(st));
-    $('#nowName').textContent=st.name; $('#miniName').textContent=st.name;
+    $('#nowName').textContent=st.name;
   }
   $('#statusText').textContent=statusText();
-  $('#miniStatus').textContent=(S.song&&m==='playing')?S.song:statusText();
   $('#song').hidden=!(S.song&&m==='playing');
 
   const active=(m==='playing'||m==='tuning');
-  for(const b of [$('#playBtn'),$('#miniPlay'),$('#ambPlay')]){
+  for(const b of [$('#playBtn'),$('#dockPlay'),$('#ambPlay')]){
     b.innerHTML=active?ICON.pause:ICON.play;
     b.setAttribute('aria-label',active?'Pausar':'Escuchar');
   }
@@ -1089,9 +1102,8 @@ function render(){
   const i=S.list.indexOf(st);
   $('#needle').style.left=pos(i)+'%';
   $$('#dots i').forEach(d=>d.classList.toggle('on',d.dataset.id===st.id));
-  markCards();
+  markCards(); markStrip();
 
-  $('#mini').classList.toggle('song-on',!!(S.song&&m==='playing'));
   document.title=(m==='playing'?(S.song||st.name)+' · ':'')+'Sintonía';
   mediaSession();
   paintAmb();
@@ -1219,7 +1231,6 @@ document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElemen
 $$('[data-icon]').forEach(b=>{ b.innerHTML=ICON[b.dataset.icon]; });
 dialLabels($('#labels'));
 $('#playBtn').addEventListener('click',toggle);
-$('#miniPlay').addEventListener('click',toggle);
 $('#prevBtn').addEventListener('click',()=>step(-1));
 $('#nextBtn').addEventListener('click',()=>step(1));
 $('#favBtn').addEventListener('click',()=>toggleFav(S.cur.id));
@@ -1229,9 +1240,7 @@ $('#ambClose').addEventListener('click',closeAmb);
 $('#ambPlay').addEventListener('click',toggle);
 $('#ambPrev').addEventListener('click',()=>step(-1));
 $('#ambNext').addEventListener('click',()=>step(1));
-$('#miniPrev').addEventListener('click',()=>step(-1));
-$('#miniNext').addEventListener('click',()=>step(1));
-$('#miniInfo').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+$('#dockPlay').addEventListener('click',toggle);
 
 document.addEventListener('keydown',e=>{
   if(!cover.hidden) return;
@@ -1243,12 +1252,6 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='ArrowLeft') step(-1);
 });
 
-if('IntersectionObserver' in window){
-  new IntersectionObserver(([en])=>{
-    const show=!en.isIntersecting;
-    const mini=$('#mini'); mini.classList.toggle('show',show); mini.inert=!show;
-  }).observe($('#console'));
-}
 
 /* ---------- Instalación como app ---------- */
 const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -1268,7 +1271,7 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   addEventListener('load',()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
 
-renderSleepOpts(); renderDots(); renderGrid(); render();
+renderSleepOpts(); renderDots(); renderStrip(); renderGrid(); render();
 openCover();
 })();
 </script>
