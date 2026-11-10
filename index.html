@@ -192,11 +192,23 @@ h1,h2,p{margin:0}
 
 .console-wrap{position:relative;z-index:2;flex:1;display:flex;margin-top:12px}
 .console{
-  position:relative;overflow:hidden;background:var(--dial);color:var(--on-dial);width:100%;
+  --c:#FF3D6E;
+  position:relative;overflow:hidden;color:var(--on-dial);width:100%;
+  background:
+    radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--c) 55%,transparent),transparent 62%),
+    radial-gradient(80% 55% at 100% 100%,rgba(58,75,255,.55),transparent 70%),
+    radial-gradient(70% 50% at 0% 85%,color-mix(in srgb,var(--c) 28%,transparent),transparent 70%),
+    linear-gradient(180deg,#141B4D 0%,#0A0F2C 55%,#070A1F 100%);
+  transition:background .6s;
   display:flex;flex-direction:column;justify-content:space-between;
   border-radius:24px;padding:20px 20px 22px;
   box-shadow:0 30px 60px -28px rgba(4,6,40,.75),inset 0 1px 0 rgba(255,255,255,.07);
 }
+.console::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.4px);background-size:18px 18px;
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent 70%);mask-image:linear-gradient(180deg,#000,transparent 70%)}
+.console>*{position:relative}
+.console>.fabs{position:absolute}
 .console::after{content:"";position:absolute;inset:0 0 58% 0;background:linear-gradient(180deg,rgba(255,255,255,.055),transparent);pointer-events:none}
 
 /* Dial */
@@ -1369,7 +1381,7 @@ function render(){
 
   if(shownId!==st.id){
     shownId=st.id;
-    $('#nowLogo').replaceChildren(logo(st));
+    $('#nowLogo').replaceChildren(logo(st)); $('#console').style.setProperty('--c',st.color);
     $('#nowName').textContent=st.name;
   }
   $('#statusText').textContent=statusText();
