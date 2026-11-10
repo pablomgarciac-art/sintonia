@@ -408,12 +408,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .strip-arrow:disabled{opacity:.28;box-shadow:none;cursor:default}
 .dock-row2{flex:0 0 100%;display:flex;gap:8px;margin-top:8px}
 .dock-more,.dock-home{display:flex;align-items:center;justify-content:center;gap:8px;min-height:40px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .875rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
-.dock-more{flex:7 1 0}
-.dock-home{flex:3 1 0}
-.dock-home:hover{color:var(--needle);border-color:var(--needle)}
-.dock-home svg{width:17px;height:17px}
+.dock-more{flex:7 1 0;background:linear-gradient(135deg,#3A4BFF,#2234E0);border-color:#6F7DFF;color:#fff;box-shadow:0 8px 18px -8px rgba(42,59,255,.9)}
+.dock-more:hover{background:linear-gradient(135deg,#4C5CFF,#2D3FF0);color:#fff;border-color:#9AA5FF}
+.dock-more svg{width:20px;height:20px}
+.dock-home{flex:3 1 0;background:rgba(255,225,74,.13);border-color:rgba(255,225,74,.7);color:var(--needle)}
+.dock-home:hover{background:rgba(255,225,74,.24);color:var(--needle);border-color:var(--needle)}
+.dock-home svg{width:19px;height:19px}
 .dock-more-old{display:flex;align-items:center;justify-content:center;gap:8px;margin:0;min-height:36px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .8125rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
-.dock-more:hover{color:var(--needle);border-color:var(--needle)}
 .dock-more svg{width:16px;height:16px;transition:transform .25s}
 .dock-more.open svg{transform:rotate(180deg)}
 .sheet{position:fixed;inset:0;z-index:70;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;transform:translateY(100%);visibility:hidden;transition:transform .35s cubic-bezier(.3,.8,.2,1),visibility 0s .35s}
@@ -432,8 +433,10 @@ body.sheet-open{overflow:hidden}
 .chip-st .logo .badge{display:none}
 .chip-st .mono{font-size:1.05rem}
 .chip-st span{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip-st.ctr .logo{width:76px;border-radius:18px;border-color:rgba(255,255,255,.85)}
+.chip-st.ctr{color:#fff;opacity:1}
 .chip-st.on{color:var(--needle);opacity:1}
-.chip-st.on .logo{width:76px;border-radius:18px;border-color:var(--needle);box-shadow:0 0 0 3px var(--needle-glow)}
+.chip-st.on .logo{border-color:var(--needle);box-shadow:0 0 0 3px var(--needle-glow)}
 .chip-st.pop{animation:chipin .28s ease-out}
 @keyframes chipin{from{transform:scale(.9);opacity:.4}to{transform:none}}
 
@@ -460,7 +463,7 @@ body.amb-open{overflow:hidden}
 .amb .ibtn{border-color:currentColor;color:inherit;width:56px;height:56px}
 .amb .ibtn.play{width:76px;height:76px;background:#fff;color:#0A0F2C;border:0;box-shadow:none}
 
-@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px}  .chip-st .logo{width:52px} .chip-st.on .logo{width:68px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
+@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px}  .chip-st .logo{width:52px} .chip-st.ctr .logo{width:68px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
 @media (max-width:760px){
   .now{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:12px}
   .viz{grid-row:auto;width:calc(100% - 104px)}
@@ -526,7 +529,7 @@ body.amb-open{overflow:hidden}
     <p class="cover-sub">Las emisoras más escuchadas de España en un solo dial.</p>
     <div class="cover-actions">
       <button class="cta big" id="coverGo" type="button"></button>
-      <button class="ghost big" id="coverSkip" type="button"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h9M19 7h1M4 17h1M11 17h9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="8" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>Ajustes</button>
+      <button class="ghost big" id="coverSkip" type="button"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Ajustes</button>
       <button class="ghost" id="installBtn" type="button" hidden>Instalar en el móvil</button>
     </div>
   </div>
@@ -633,12 +636,12 @@ body.amb-open{overflow:hidden}
 </div>
 
 <nav class="dock" id="dock" aria-label="Cambiar de emisora">
-  <button class="strip-arrow" id="stripPrev" type="button" aria-label="Emisora anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="strip-arrow" id="stripPrev" type="button" aria-label="Ver la emisora anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <div class="strip" id="strip"></div>
-  <button class="strip-arrow" id="stripNext" type="button" aria-label="Emisora siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="strip-arrow" id="stripNext" type="button" aria-label="Ver la emisora siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <div class="dock-row2">
-    <button class="dock-more" id="moreBtn" type="button" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="moreLabel">Ajustes</span></button>
-    <button class="dock-home" id="homeBtn" type="button" aria-label="Volver a la portada"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5l-7 7 7 7M3 12h13a5 5 0 0 1 5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver</button>
+    <button class="dock-more" id="moreBtn" type="button" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span id="moreLabel">Ajustes</span></button>
+    <button class="dock-home" id="homeBtn" type="button" aria-label="Volver a la portada"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Volver</button>
   </div>
 </nav>
 
@@ -1323,17 +1326,27 @@ function startViz(){ if(!vRaf&&vW) vRaf=requestAnimationFrame(vDraw); }
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden) startViz(); });
 if('ResizeObserver' in window) new ResizeObserver(vSize).observe(viz); else addEventListener('resize',vSize);
 let stripShown=null;
+let stripCur=null;
 function renderStrip(){
   const box=$('#strip'); box.replaceChildren();
-  const n=S.list.length, i=Math.max(0,S.list.indexOf(S.cur));
-  const trio=n>=3?[S.list[(i-1+n)%n],S.cur,S.list[(i+1)%n]]:[...S.list];
+  const n=S.list.length;
+  if(!S.view||!S.list.includes(S.view)) S.view=S.cur;
+  const i=Math.max(0,S.list.indexOf(S.view));
+  const trio=n>=3?[S.list[(i-1+n)%n],S.view,S.list[(i+1)%n]]:[...S.list];
   for(const st of trio){
-    const b=h('button',{class:'chip-st'+(st.id===S.cur.id?' on':''),type:'button','data-id':st.id,'aria-label':(st.id===S.cur.id?'Emisora actual: ':'Sintonizar ')+st.name,onclick:()=>onPick(st)},logo(st),h('span',{},st.name));
-    box.append(b);
+    const playing=st.id===S.cur.id, center=st.id===S.view.id;
+    box.append(h('button',{class:'chip-st'+(center?' ctr':'')+(playing?' on':''),type:'button','data-id':st.id,
+      'aria-label':(playing?'Suena ahora: ':'Sintonizar ')+st.name,
+      onclick:()=>{ if(playing) onPick(st); else tune(st); }},logo(st),h('span',{},st.name)));
   }
-  stripShown=S.cur.id;
+  stripCur=S.cur.id;
 }
-function markStrip(){ if(stripShown!==S.cur.id){ renderStrip(); const c=$('#strip .chip-st.on'); if(c) c.classList.add('pop'); } }
+function popStrip(){ const c=$('#strip .chip-st.ctr'); if(c) c.classList.add('pop'); }
+function moveView(d){
+  const n=S.list.length, i=Math.max(0,S.list.indexOf(S.view||S.cur));
+  S.view=S.list[(i+d+n)%n]; renderStrip(); popStrip();
+}
+function markStrip(){ if(stripCur!==S.cur.id){ S.view=S.cur; renderStrip(); popStrip(); } }
 let shownId=null;
 function render(){
   const st=S.cur, m=S.mode;
@@ -1533,8 +1546,8 @@ $('#prevBtn').addEventListener('click',()=>step(-1));
 $('#nextBtn').addEventListener('click',()=>step(1));
 $('#favBtn').addEventListener('click',()=>toggleFav(S.cur.id));
 $('#srcBtn').addEventListener('click',nextSource);
-$('#stripPrev').addEventListener('click',()=>step(-1));
-$('#stripNext').addEventListener('click',()=>step(1));
+$('#stripPrev').addEventListener('click',()=>moveView(-1));
+$('#stripNext').addEventListener('click',()=>moveView(1));
 const sheet=$('#sheet');
 function setSheet(open){
   sheet.classList.toggle('open',open); sheet.inert=!open;

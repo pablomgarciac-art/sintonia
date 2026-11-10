@@ -1,6 +1,6 @@
 /* Service worker de Sintonía: guarda la propia app para que abra al instante.
    No toca el audio ni nada de otros servidores: las emisoras van siempre directas. */
-const VERSION = 'sintonia-v17';
+const VERSION = 'sintonia-v18';
 const SHELL = [
   './',
   './index.html',
