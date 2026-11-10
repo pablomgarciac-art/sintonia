@@ -126,6 +126,10 @@ h1,h2,p{margin:0}
 .brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:2px 4px 0}
 .wordmark{font-family:var(--font-display);font-weight:800;font-size:1.5rem;letter-spacing:-.04em;line-height:1}
 
+.favtop{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 8px 0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.14);color:#fff;font:700 .8125rem/1 var(--font-body);cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.favtop:hover{background:rgba(255,255,255,.26)}
+.favtop svg{width:16px;height:16px;fill:var(--heart);flex:none}
+.favtop .n{min-width:20px;padding:4px 6px;border-radius:999px;background:#fff;color:#10142E;font:500 .6875rem/1 var(--font-mono);text-align:center}
 .count{font:500 .6875rem/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.8}
 
 .console-wrap{position:relative;z-index:2;flex:1;display:flex;margin-top:12px}
@@ -219,7 +223,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 #sleepLeft{display:none!important}
 .song{min-height:1.3em}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.fabs{position:absolute;right:10px;top:15%;z-index:3;display:flex;flex-direction:column;gap:12px}
+.fabs{position:absolute;right:10px;top:12px;z-index:3;display:flex;flex-direction:column;gap:12px}
 .fab{position:relative;width:46px;height:46px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--on-dial);cursor:pointer;box-shadow:0 8px 20px -8px rgba(0,0,0,.65);transition:background .15s,border-color .15s,color .15s}
 .fab:hover{background:rgba(255,255,255,.16)}
 .fab svg{width:22px;height:22px}
@@ -336,11 +340,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .foot + .foot{margin-top:12px}
 
 /* Dock inferior: play + carrusel de emisoras */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;flex-wrap:wrap;align-items:center;align-content:center;background:var(--dial);color:var(--on-dial);border-top:1px solid var(--dial-line);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;flex-wrap:wrap;align-items:center;align-content:center;background:var(--dial);color:var(--on-dial);border-top:1px solid var(--dial-line);padding:10px max(8px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
 .dock .ibtn.play{width:60px;height:60px;flex:none;margin-right:8px;box-shadow:0 0 0 4px var(--needle-glow)}
 .dock .dockfav{width:46px;height:46px;flex:none;margin-right:2px}
 .dock .dockfav[aria-pressed="true"]{background:var(--heart);border-color:var(--heart);color:#fff}
-.dock-more{flex:0 0 calc(100% - 24px);display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 0;min-height:36px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .8125rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
+.strip-arrow{flex:none;width:30px;height:68px;display:grid;place-items:center;padding:0;border:0;border-radius:12px;background:transparent;color:var(--on-dial);cursor:pointer;margin-top:-14px}
+.strip-arrow svg{width:20px;height:20px}
+.strip-arrow:hover{background:rgba(255,255,255,.08)}
+.strip-arrow:disabled{opacity:.25;cursor:default}
+.dock-more{flex:0 0 100%;display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 0;min-height:36px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .8125rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
 .dock-more:hover{color:var(--needle);border-color:var(--needle)}
 .dock-more svg{width:16px;height:16px;transition:transform .25s}
 .dock-more.open svg{transform:rotate(180deg)}
@@ -352,7 +360,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 body.sheet-open{overflow:hidden}
 .strip-empty{align-self:center;padding:0 10px;font:500 .8125rem/1.3 var(--font-body);color:var(--dial-muted);white-space:normal;max-width:210px}
 .dock .ibtn.play svg{width:26px;height:26px}
-.strip{position:relative;flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px 18px 4px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 26px),transparent)}
+.strip{position:relative;flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 .strip::-webkit-scrollbar{display:none}
 .chip-st{all:unset;box-sizing:border-box;flex:none;width:74px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;scroll-snap-align:center;font:600 .75rem/1.1 var(--font-body);color:var(--dial-muted);text-align:center;-webkit-tap-highlight-color:transparent}
 .chip-st:focus-visible{outline:3px solid var(--needle);outline-offset:2px;border-radius:14px}
@@ -455,7 +463,7 @@ body.amb-open{overflow:hidden}
   <div class="wrap">
     <div class="brand">
       <h1 class="wordmark">Sintonía</h1>
-      <span class="count" id="count"></span>
+      <button class="favtop" id="favTop" type="button" aria-label="Ir a mis favoritas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.3C1.7 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 3 1.7-2 3.3-3 5.2-3 3.2 0 5.1 3 4 6.2-1.7 4.7-9.2 9.3-9.2 9.3z"/></svg>Favoritos<span class="n" id="favTopN">0</span></button>
     </div>
 
     <section class="console-wrap" aria-label="Reproductor">
@@ -551,9 +559,9 @@ body.amb-open{overflow:hidden}
 </div>
 
 <nav class="dock" id="dock" aria-label="Cambiar de emisora">
-  <button class="ibtn play" id="dockPlay" type="button" aria-label="Escuchar"></button>
-  <button class="ibtn dockfav" id="dockFav" type="button" aria-pressed="false" aria-label="Ver solo mis favoritas" data-icon="heart"></button>
+  <button class="strip-arrow" id="stripPrev" type="button" aria-label="Ver emisoras anteriores"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <div class="strip" id="strip"></div>
+  <button class="strip-arrow" id="stripNext" type="button" aria-label="Ver más emisoras"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button class="dock-more" id="moreBtn" type="button" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="moreLabel">Funciones avanzadas</span></button>
 </nav>
 
@@ -652,7 +660,7 @@ const audio=$('#audio');
 const S={
   list:[],favs:new Set(store.get('favs',[])),filter:'all',cur:null,curUrl:null,mode:'idle',
   token:0,hls:null,attempting:false,buffering:false,ready:false,retries:0,waitT:null,
-  vol:1,stripFav:store.get('stripFav',false),sleepEnd:0,sleepT:null,song:'',bad:new Map()
+  vol:1,stripFav:false,sleepEnd:0,sleepT:null,song:'',bad:new Map()
 };
 S.list=[...BUILTIN,...store.get('custom',[]).map(c=>({...c,custom:true}))];
 const lastId=store.get('last',null);
@@ -1182,7 +1190,7 @@ function renderGrid(){
   if(!list.length) ul.append(h('li',{class:'empty'},S.filter==='fav'?'Todavía no tienes favoritas. Pulsa el corazón de una emisora para guardarla aquí.':'No hay emisoras en esta categoría.'));
   for(const st of list) ul.append(card(st));
   renderChips(); renderFavSec(); markCards();
-  $('#count').textContent=S.list.length+' emisoras';
+  $('#favTopN').textContent=String(S.favs.size);
 }
 function markCards(){
   const live=S.mode==='playing'&&!S.buffering;
@@ -1240,8 +1248,6 @@ if('ResizeObserver' in window) new ResizeObserver(vSize).observe(viz); else addE
 let stripShown=null;
 function renderStrip(){
   const box=$('#strip'); box.replaceChildren();
-  const fb=$('#dockFav'); fb.setAttribute('aria-pressed',String(S.stripFav));
-  fb.setAttribute('aria-label',S.stripFav?'Ver todas las emisoras':'Ver solo mis favoritas');
   const list=S.stripFav?S.list.filter(x=>S.favs.has(x.id)):S.list;
   if(!list.length) box.append(h('span',{class:'strip-empty'},'Aún no tienes favoritas. Toca «Favorita» en una emisora.'));
   for(const st of list) box.append(h('button',{class:'chip-st',type:'button','data-id':st.id,'aria-label':'Sintonizar '+st.name,onclick:()=>onPick(st)},logo(st),h('span',{},st.name)));
@@ -1270,7 +1276,7 @@ function render(){
   $('#song').hidden=!(S.song&&m==='playing');
 
   const active=(m==='playing'||m==='tuning');
-  for(const b of [$('#playBtn'),$('#dockPlay'),$('#ambPlay')]){
+  for(const b of [$('#playBtn'),$('#ambPlay')]){
     b.innerHTML=active?ICON.pause:ICON.play;
     b.setAttribute('aria-label',active?'Pausar':'Escuchar');
   }
@@ -1439,7 +1445,16 @@ $('#prevBtn').addEventListener('click',()=>step(-1));
 $('#nextBtn').addEventListener('click',()=>step(1));
 $('#favBtn').addEventListener('click',()=>toggleFav(S.cur.id));
 $('#srcBtn').addEventListener('click',nextSource);
-$('#dockFav').addEventListener('click',()=>{ S.stripFav=!S.stripFav; store.set('stripFav',S.stripFav); renderStrip(); });
+const strip=$('#strip');
+function armArrows(){
+  $('#stripPrev').disabled=strip.scrollLeft<=2;
+  $('#stripNext').disabled=strip.scrollLeft>=strip.scrollWidth-strip.clientWidth-2;
+}
+$('#stripPrev').addEventListener('click',()=>strip.scrollBy({left:-strip.clientWidth*0.75,behavior:'smooth'}));
+$('#stripNext').addEventListener('click',()=>strip.scrollBy({left:strip.clientWidth*0.75,behavior:'smooth'}));
+strip.addEventListener('scroll',armArrows,{passive:true});
+addEventListener('resize',armArrows);
+setTimeout(armArrows,300);
 const sheet=$('#sheet');
 function setSheet(open){
   sheet.classList.toggle('open',open); sheet.inert=!open;
@@ -1451,12 +1466,16 @@ function setSheet(open){
 }
 $('#moreBtn').addEventListener('click',()=>setSheet(!sheet.classList.contains('open')));
 $('#sheetClose').addEventListener('click',()=>setSheet(false));
+$('#favTop').addEventListener('click',()=>{
+  setSheet(true);
+  setTimeout(()=>{ const t=$('#favTitle'); if(t) sheet.scrollTo({top:Math.max(0,t.closest('.favsec').offsetTop-70),behavior:'smooth'}); },60);
+});
 $('#ambBtn').addEventListener('click',openAmb);
 $('#ambClose').addEventListener('click',closeAmb);
 $('#ambPlay').addEventListener('click',toggle);
 $('#ambPrev').addEventListener('click',()=>step(-1));
 $('#ambNext').addEventListener('click',()=>step(1));
-$('#dockPlay').addEventListener('click',toggle);
+
 
 document.addEventListener('keydown',e=>{
   if(!cover.hidden) return;
