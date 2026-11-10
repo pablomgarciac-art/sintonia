@@ -213,9 +213,29 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .ctl-row.rowmain{justify-content:center;gap:22px;width:100%}
 .ctl-row.rowmain .ibtn:not(.play){width:50px;height:50px}
 .side{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:56px;height:56px;padding:0;border-radius:16px;border:1px solid var(--dial-line);background:rgba(255,255,255,.06);color:var(--on-dial);font:700 .625rem/1 var(--font-body);letter-spacing:.01em;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
-.scr-corner{position:absolute;top:12px;right:12px;z-index:3}
-.fav-corner{position:absolute;top:12px;left:12px;z-index:3}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.fabs{position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:12px}
+.fab{position:relative;width:46px;height:46px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--on-dial);cursor:pointer;box-shadow:0 8px 20px -8px rgba(0,0,0,.65);transition:background .15s,border-color .15s,color .15s}
+.fab:hover{background:rgba(255,255,255,.16)}
+.fab svg{width:22px;height:22px}
+#fabSleep svg,#ambBtn svg{fill:none}
+.fab[aria-pressed="true"]{color:var(--heart);border-color:var(--heart);background:rgba(255,61,110,.16);box-shadow:0 0 0 4px rgba(255,61,110,.18)}
+.fab[aria-pressed="true"] svg{fill:var(--heart);stroke:var(--heart)}
+.fab.on{color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.14);box-shadow:0 0 0 4px var(--needle-glow)}
 .tools{margin-bottom:22px}
+.tools .sheet-row{padding:22px 20px;border-radius:22px;border:0;background:var(--hero);color:#fff;box-shadow:0 18px 36px -18px rgba(30,42,210,.8)}
+.tools .sheet-row>span:first-child{width:56px;height:56px;border-radius:50%;background:var(--needle);display:grid;place-items:center;flex:none}
+.tools .sheet-row svg{width:28px;height:28px;color:var(--on-needle)}
+.tools .sheet-row b{font-size:1.25rem;color:#fff}
+.tools .sheet-row small{font-size:.9375rem;color:rgba(255,255,255,.88)}
+.tools .sheet-row.on small{color:var(--needle)}
+.tools .sheet-row .go{background:var(--needle);color:var(--on-needle);border-radius:999px;padding:11px 16px}
+.favsec{margin-bottom:26px;padding:18px 16px 18px;border-radius:22px;background:var(--surface);border:1px solid var(--line);box-shadow:0 14px 30px -22px rgba(16,20,46,.5)}
+.favsec h2{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-family:var(--font-display);font-weight:600;font-size:1.375rem;letter-spacing:-.02em}
+.favsec h2 svg{width:26px;height:26px;fill:var(--heart);flex:none}
+.favsec .n{font:500 .8125rem/1 var(--font-mono);background:var(--heart);color:#fff;border-radius:999px;padding:5px 9px}
+.favsec .card{background:var(--bg)}
+.favgrid .empty{padding:10px 2px;font-size:1rem}
 .sheet-row{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
 .sheet-row:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .sheet-row svg{width:26px;height:26px;flex:none;fill:none;color:var(--accent)}
@@ -364,7 +384,7 @@ body.amb-open{overflow:hidden}
 @media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px} .chip-st{width:70px} .chip-st .logo{width:66px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
 @media (max-width:760px){
   .now{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:12px}
-  .viz{grid-row:auto}
+  .viz{grid-row:auto;width:calc(100% - 104px)}
   .now>div:nth-child(2){display:flex;flex-direction:column;align-items:center;width:100%}
   .song,.status{justify-content:center;max-width:100%}
   .console{padding:16px 16px 20px}
@@ -387,7 +407,8 @@ body.amb-open{overflow:hidden}
   .controls{gap:10px}
   .song,.status{margin-top:6px}
 }
-@media (max-width:360px){ .sleep-pop .big{font-size:1.5rem} .sleep-pop .big.off{font-size:1.125rem} .sleep-pop .step .ibtn{width:52px;height:52px;font-size:.9375rem} .sleep-pop .step{gap:6px} }
+@media (min-width:761px){ .fabs{top:12px;transform:none;flex-direction:row} }
+@media (max-width:360px){ .fab{width:40px;height:40px} .fab svg{width:20px;height:20px} .fabs{gap:10px;right:8px} .viz{width:calc(100% - 92px)} .sleep-pop .big{font-size:1.5rem} .sleep-pop .big.off{font-size:1.125rem} .sleep-pop .step .ibtn{width:52px;height:52px;font-size:.9375rem} .sleep-pop .step{gap:6px} }
 @media (max-width:340px){ .side{width:46px;height:50px} .controls .ibtn.play{width:56px;height:56px} .ctl-row.rowmain .ibtn:not(.play){width:40px;height:40px} }
 @media (max-height:700px){
   :root{--dock:calc(142px + env(safe-area-inset-bottom,0px))}
@@ -434,8 +455,11 @@ body.amb-open{overflow:hidden}
 
     <section class="console-wrap" aria-label="Reproductor">
       <div class="console" id="console" data-mode="idle">
-        <button class="side fav-corner" id="favBtn" type="button" aria-pressed="false" aria-label="Añadir a favoritas"><span data-icon="heart"></span><b id="favLabel">Favorita</b></button>
-        <button class="side scr scr-corner" id="ambBtn" type="button" aria-label="Modo pantalla"><span data-icon="screen"></span><b>Pantalla</b></button>
+        <div class="fabs" role="group" aria-label="Acciones rápidas">
+          <button class="fab" id="favBtn" type="button" aria-pressed="false" aria-label="Añadir a favoritas"><span data-icon="heart"></span><b class="sr" id="favLabel">Favorita</b></button>
+          <button class="fab" id="fabSleep" type="button" aria-label="Temporizador de apagado"><span data-icon="timer"></span></button>
+          <button class="fab" id="ambBtn" type="button" aria-label="Modo pantalla"><span data-icon="screen"></span></button>
+        </div>
 
         <div class="now">
           <div class="now-logo" id="nowLogo"></div>
@@ -467,6 +491,11 @@ body.amb-open{overflow:hidden}
 <div class="wrap main">
   <section class="tools" aria-label="Herramientas">
     <button class="sheet-row" id="sleepBtn" type="button" aria-label="Temporizador de apagado"><span data-icon="timer" aria-hidden="true"></span><span class="t"><b>Temporizador de apagado</b><small id="sleepLabel">Desactivado</small></span><span class="go">Ajustar</span></button>
+  </section>
+
+  <section class="favsec" aria-labelledby="favTitle">
+    <h2 id="favTitle"><span data-icon="heart" aria-hidden="true"></span>Mis favoritas <span class="n" id="favCount">0</span></h2>
+    <ul class="grid favgrid" id="favList"></ul>
   </section>
 
   <div class="section-head">
@@ -1051,16 +1080,16 @@ function setSleep(min){
   sleepTick();
 }
 function sleepTick(){
-  const label=$('#sleepLeft'), btn=$('#sleepBtn');
-  if(!S.sleepEnd){ label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Desactivado'; return; }
+  const label=$('#sleepLeft'), btns=[$('#sleepBtn'),$('#fabSleep')];
+  if(!S.sleepEnd){ label.hidden=true; btns.forEach(b=>b.classList.remove('on')); $('#sleepLabel').textContent='Desactivado'; return; }
   const left=S.sleepEnd-Date.now();
   if(left<=0){
     clearInterval(S.sleepT); S.sleepT=null; S.sleepEnd=0;
     pauseNow(); audio.volume=S.vol;
-    label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Desactivado'; return;
+    label.hidden=true; btns.forEach(b=>b.classList.remove('on')); $('#sleepLabel').textContent='Desactivado'; return;
   }
   label.hidden=false; label.textContent='Se apaga en '+fmt(left); $('#sleepLabel').textContent='Se apaga en '+fmt(left);
-  btn.classList.add('on');
+  btns.forEach(b=>b.classList.add('on'));
   if($('#sleepPop').classList.contains('show')) paintSleepPop();
   if(left<=10000) audio.volume=Math.max(0,S.vol*(left/10000));
 }
@@ -1085,18 +1114,20 @@ function adjustSleep(d){
   if(d<0&&!S.sleepEnd) return;
   setSleep(t); paintSleepPop(); bumpSleepPop();
 }
-$('#sleepBtn').addEventListener('click',()=>{
+const sleepToggle=()=>{
   if($('#sleepPop').classList.contains('show')){ closeSleepPop(); return; }
   if(!S.sleepEnd) setSleep(15);
   openSleepPop();
-});
+};
+$('#sleepBtn').addEventListener('click',sleepToggle);
+$('#fabSleep').addEventListener('click',sleepToggle);
 $('#sleepPlus').addEventListener('click',()=>adjustSleep(1));
 $('#sleepMinus').addEventListener('click',()=>adjustSleep(-1));
 $('#sleepOff').addEventListener('click',()=>{ setSleep(0); paintSleepPop(); bumpSleepPop(); });
 $('#sleepDone').addEventListener('click',closeSleepPop);
 document.addEventListener('pointerdown',e=>{
   if(!$('#sleepPop').classList.contains('show')) return;
-  if(e.target.closest('#sleepPop,#sleepBtn')) return;
+  if(e.target.closest('#sleepPop,#sleepBtn,#fabSleep')) return;
   closeSleepPop();
 });
 document.addEventListener('visibilitychange',()=>{ if(S.sleepEnd) sleepTick(); });
@@ -1133,12 +1164,19 @@ function renderChips(){
     box.append(h('button',{class:'chip',type:'button','aria-pressed':String(S.filter===k),onclick:()=>{ S.filter=k; renderGrid(); }},label,h('span',{class:'n'},String(n))));
   }
 }
+function renderFavSec(){
+  const box=$('#favList'), list=S.list.filter(x=>S.favs.has(x.id));
+  $('#favCount').textContent=String(list.length);
+  box.replaceChildren();
+  if(!list.length){ box.append(h('li',{class:'empty'},'Aún no tienes favoritas. Toca el corazón de una emisora y aparecerá aquí.')); return; }
+  for(const st of list) box.append(card(st));
+}
 function renderGrid(){
   const ul=$('#grid'); ul.replaceChildren();
   const list=visibleList();
   if(!list.length) ul.append(h('li',{class:'empty'},S.filter==='fav'?'Todavía no tienes favoritas. Pulsa el corazón de una emisora para guardarla aquí.':'No hay emisoras en esta categoría.'));
   for(const st of list) ul.append(card(st));
-  renderChips(); markCards();
+  renderChips(); renderFavSec(); markCards();
   $('#count').textContent=S.list.length+' emisoras';
 }
 function markCards(){
