@@ -162,7 +162,7 @@ h1,h2,p{margin:0}
 @keyframes seek{from{transform:translateX(-4px)}to{transform:translateX(4px)}}
 
 /* Ecualizador del reproductor */
-.viz{display:block;width:100%;height:72px;margin:0 0 6px}
+.viz{display:block;width:100%;height:64px;margin:0;grid-column:1/-1;grid-row:2}
 /* (dial antiguo) */
 .console .dial{height:50px;margin:0 8px 6px}
 .console .dial-scale{height:30px}
@@ -210,17 +210,17 @@ input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(
 input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--needle)}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--needle);border:0;box-shadow:0 0 0 4px var(--needle-glow)}
 
-.ctl-row.rowmain{justify-content:center;gap:18px}
+.ctl-row.rowmain{justify-content:space-between;gap:4px;width:100%}
 .ctl-row.rowmain .ibtn:not(.play){width:50px;height:50px}
-.pills{display:flex;gap:8px}
-.pill{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 8px;border-radius:16px;border:1px solid var(--dial-line);background:rgba(255,255,255,.06);color:var(--on-dial);font:700 .9375rem/1 var(--font-body);cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
-.pill:hover{background:rgba(255,255,255,.12)}
-.pill svg{width:22px;height:22px;flex:none}
-.pill.timer svg,.pill.scr svg{fill:none}
+.side{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:56px;height:56px;padding:0;border-radius:16px;border:1px solid var(--dial-line);background:rgba(255,255,255,.06);color:var(--on-dial);font:700 .625rem/1 var(--font-body);letter-spacing:.01em;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.scr-corner{position:absolute;top:12px;right:12px;z-index:3}
+.side:hover{background:rgba(255,255,255,.12)}
+.side svg{width:22px;height:22px;flex:none}
+.side.timer svg,.side.scr svg{fill:none}
 #favBtn svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
-.pill[aria-pressed="true"]{color:var(--heart);border-color:var(--heart);background:rgba(255,61,110,.12)}
-.pill[aria-pressed="true"] svg{fill:var(--heart);stroke:var(--heart)}
-.pill.timer.on{color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.1)}
+.side[aria-pressed="true"]{color:var(--heart);border-color:var(--heart);background:rgba(255,61,110,.12)}
+.side[aria-pressed="true"] svg{fill:var(--heart);stroke:var(--heart)}
+.side.timer.on{color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.1)}
 .sleep-pop{position:fixed;left:50%;bottom:calc(var(--dock) + 14px);z-index:90;width:min(340px,calc(100% - 28px));transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;background:var(--dial);color:var(--on-dial);border:1px solid var(--needle);border-radius:24px;padding:18px 16px 16px;text-align:center;box-shadow:0 20px 50px -10px rgba(4,6,40,.85),0 0 0 6px var(--needle-glow)}
 .sleep-pop.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .sleep-pop .eyebrow{margin-bottom:12px}
@@ -349,14 +349,15 @@ body.amb-open{overflow:hidden}
 .amb .ibtn{border-color:currentColor;color:inherit;width:56px;height:56px}
 .amb .ibtn.play{width:76px;height:76px;background:#fff;color:#0A0F2C;border:0;box-shadow:none}
 
-@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px} .chip-st{width:70px} .chip-st .logo{width:66px} .pill{font-size:.875rem;gap:6px} .pill svg{width:20px;height:20px} }
+@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px} .chip-st{width:70px} .chip-st .logo{width:66px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
 @media (max-width:760px){
-  .now{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:14px}
+  .now{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:12px}
+  .viz{grid-row:auto}
   .now>div:nth-child(2){display:flex;flex-direction:column;align-items:center;width:100%}
   .song,.status{justify-content:center;max-width:100%}
   .console{padding:16px 16px 20px}
   .controls{grid-column:1/-1;width:100%}
-  .now-logo .logo{width:clamp(76px,calc(100svh - 615px),min(46vw,190px));border-radius:26px}
+  .now-logo .logo{width:clamp(76px,calc(100svh - 545px),min(46vw,190px));border-radius:26px}
   .now-name{font-size:clamp(1.6rem,7vw,2.2rem)}
   .add form,#npForm{grid-template-columns:1fr}
 }
@@ -367,7 +368,6 @@ body.amb-open{overflow:hidden}
   .console .dial-scale{height:26px}
   .console .dial-labels{display:none}
   .eyebrow{margin-bottom:4px}
-  .pill{min-height:46px}
   .ibtn.play{width:64px;height:64px}
   .vol{display:none}
   .now{gap:8px}
@@ -375,6 +375,7 @@ body.amb-open{overflow:hidden}
   .controls{gap:10px}
   .song,.status{margin-top:6px}
 }
+@media (max-width:340px){ .side{width:46px;height:50px} .controls .ibtn.play{width:56px;height:56px} .ctl-row.rowmain .ibtn:not(.play){width:40px;height:40px} }
 @media (max-height:700px){
   :root{--dock:calc(142px + env(safe-area-inset-bottom,0px))}
   .chip-st{width:62px}
@@ -382,7 +383,6 @@ body.amb-open{overflow:hidden}
   .dock .ibtn.play{width:50px;height:50px}
   .eyebrow{display:none}
   .now-name{font-size:1.35rem}
-  .ctl-row.rowmain{gap:14px}
 }
 @media (max-height:600px){ .viz{height:40px} .hero{padding-top:calc(env(safe-area-inset-top,0px) + 6px)} .status{display:none} }
 @media (prefers-reduced-motion:reduce){
@@ -421,10 +421,11 @@ body.amb-open{overflow:hidden}
 
     <section class="console-wrap" aria-label="Reproductor">
       <div class="console" id="console" data-mode="idle">
-        <canvas class="viz" id="viz" aria-hidden="true"></canvas>
+        <button class="side scr scr-corner" id="ambBtn" type="button" aria-label="Modo pantalla"><span data-icon="screen"></span><b>Pantalla</b></button>
 
         <div class="now">
           <div class="now-logo" id="nowLogo"></div>
+          <canvas class="viz" id="viz" aria-hidden="true"></canvas>
           <div>
             <p class="eyebrow">En el dial</p>
             <h2 class="now-name" id="nowName">Sintonía</h2>
@@ -435,14 +436,11 @@ body.amb-open{overflow:hidden}
           </div>
           <div class="controls">
             <div class="ctl-row rowmain">
+              <button class="side" id="favBtn" type="button" aria-pressed="false" aria-label="Añadir a favoritas"><span data-icon="heart"></span><b id="favLabel">Favorita</b></button>
               <button class="ibtn" id="prevBtn" type="button" aria-label="Emisora anterior" data-icon="prev"></button>
               <button class="ibtn play" id="playBtn" type="button" aria-label="Escuchar"></button>
               <button class="ibtn" id="nextBtn" type="button" aria-label="Emisora siguiente" data-icon="next"></button>
-            </div>
-            <div class="pills">
-              <button class="pill" id="favBtn" type="button" aria-pressed="false" aria-label="Añadir a favoritas"><span data-icon="heart"></span><b id="favLabel">Favorita</b></button>
-              <button class="pill timer" id="sleepBtn" type="button" aria-label="Temporizador de apagado"><span data-icon="timer"></span><b id="sleepLabel">Apagado</b></button>
-              <button class="pill scr" id="ambBtn" type="button" aria-label="Modo pantalla"><span data-icon="screen"></span><b>Pantalla</b></button>
+              <button class="side timer" id="sleepBtn" type="button" aria-label="Temporizador de apagado"><span data-icon="timer"></span><b id="sleepLabel">Apagado</b></button>
             </div>
           </div>
         </div>
