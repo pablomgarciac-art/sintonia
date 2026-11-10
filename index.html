@@ -210,10 +210,21 @@ input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(
 input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--needle)}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--needle);border:0;box-shadow:0 0 0 4px var(--needle-glow)}
 
-.ctl-row.rowmain{justify-content:space-between;gap:4px;width:100%}
+.ctl-row.rowmain{justify-content:center;gap:22px;width:100%}
 .ctl-row.rowmain .ibtn:not(.play){width:50px;height:50px}
 .side{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:56px;height:56px;padding:0;border-radius:16px;border:1px solid var(--dial-line);background:rgba(255,255,255,.06);color:var(--on-dial);font:700 .625rem/1 var(--font-body);letter-spacing:.01em;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
 .scr-corner{position:absolute;top:12px;right:12px;z-index:3}
+.fav-corner{position:absolute;top:12px;left:12px;z-index:3}
+.tools{margin-bottom:22px}
+.sheet-row{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
+.sheet-row:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sheet-row svg{width:26px;height:26px;flex:none;fill:none;color:var(--accent)}
+.sheet-row .t{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.sheet-row b{font-size:1rem}
+.sheet-row small{font-size:.8125rem;color:var(--muted)}
+.sheet-row.on{border-color:var(--accent)}
+.sheet-row.on small{color:var(--accent);font-weight:700}
+.sheet-row .go{font:700 .875rem/1 var(--font-body);color:var(--accent)}
 .side:hover{background:rgba(255,255,255,.12)}
 .side svg{width:22px;height:22px;flex:none}
 .side.timer svg,.side.scr svg{fill:none}
@@ -225,9 +236,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .sleep-pop.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .sleep-pop .eyebrow{margin-bottom:12px}
 .sleep-pop .step{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.sleep-pop .step .ibtn{width:64px;height:64px;font:800 1.0625rem/1 var(--font-body);color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.08)}
+.sleep-pop .step .ibtn{width:60px;height:60px;font:800 1.0625rem/1 var(--font-body);color:var(--needle);border-color:var(--needle);background:rgba(255,225,74,.08)}
 .sleep-pop .step .ibtn:disabled{opacity:.35;cursor:default}
-.sleep-pop .big{flex:1;font:800 1.75rem/1.1 var(--font-display);color:var(--needle);letter-spacing:-.03em}
+.sleep-pop .big{flex:1;min-width:0;font:700 1.875rem/1.1 var(--font-body);color:var(--needle);letter-spacing:-.01em;white-space:nowrap}
+.sleep-pop .big.off{font-size:1.375rem}
 .sleep-pop .sub{margin-top:12px;font:500 .875rem/1.35 var(--font-body);color:var(--dial-muted)}
 .sleep-actions{display:flex;gap:10px;margin-top:14px}
 .sleep-actions button{flex:1;border:1px solid var(--dial-line);background:transparent;color:var(--on-dial);border-radius:14px;padding:13px 10px;font:700 .9375rem/1 var(--font-body);cursor:pointer}
@@ -375,6 +387,7 @@ body.amb-open{overflow:hidden}
   .controls{gap:10px}
   .song,.status{margin-top:6px}
 }
+@media (max-width:360px){ .sleep-pop .big{font-size:1.5rem} .sleep-pop .big.off{font-size:1.125rem} .sleep-pop .step .ibtn{width:52px;height:52px;font-size:.9375rem} .sleep-pop .step{gap:6px} }
 @media (max-width:340px){ .side{width:46px;height:50px} .controls .ibtn.play{width:56px;height:56px} .ctl-row.rowmain .ibtn:not(.play){width:40px;height:40px} }
 @media (max-height:700px){
   :root{--dock:calc(142px + env(safe-area-inset-bottom,0px))}
@@ -421,6 +434,7 @@ body.amb-open{overflow:hidden}
 
     <section class="console-wrap" aria-label="Reproductor">
       <div class="console" id="console" data-mode="idle">
+        <button class="side fav-corner" id="favBtn" type="button" aria-pressed="false" aria-label="Añadir a favoritas"><span data-icon="heart"></span><b id="favLabel">Favorita</b></button>
         <button class="side scr scr-corner" id="ambBtn" type="button" aria-label="Modo pantalla"><span data-icon="screen"></span><b>Pantalla</b></button>
 
         <div class="now">
@@ -436,11 +450,9 @@ body.amb-open{overflow:hidden}
           </div>
           <div class="controls">
             <div class="ctl-row rowmain">
-              <button class="side" id="favBtn" type="button" aria-pressed="false" aria-label="Añadir a favoritas"><span data-icon="heart"></span><b id="favLabel">Favorita</b></button>
               <button class="ibtn" id="prevBtn" type="button" aria-label="Emisora anterior" data-icon="prev"></button>
               <button class="ibtn play" id="playBtn" type="button" aria-label="Escuchar"></button>
               <button class="ibtn" id="nextBtn" type="button" aria-label="Emisora siguiente" data-icon="next"></button>
-              <button class="side timer" id="sleepBtn" type="button" aria-label="Temporizador de apagado"><span data-icon="timer"></span><b id="sleepLabel">Apagado</b></button>
             </div>
           </div>
         </div>
@@ -453,6 +465,10 @@ body.amb-open{overflow:hidden}
 <main class="sheet" id="sheet" aria-label="Funciones avanzadas" inert>
 <div class="sheet-top"><h2>Funciones avanzadas</h2><button class="sheet-close" id="sheetClose" type="button">Cerrar</button></div>
 <div class="wrap main">
+  <section class="tools" aria-label="Herramientas">
+    <button class="sheet-row" id="sleepBtn" type="button" aria-label="Temporizador de apagado"><span data-icon="timer" aria-hidden="true"></span><span class="t"><b>Temporizador de apagado</b><small id="sleepLabel">Desactivado</small></span><span class="go">Ajustar</span></button>
+  </section>
+
   <div class="section-head">
     <h2>Emisoras</h2>
     <div class="filters" id="filters" role="group" aria-label="Filtrar emisoras"></div>
@@ -1036,25 +1052,25 @@ function setSleep(min){
 }
 function sleepTick(){
   const label=$('#sleepLeft'), btn=$('#sleepBtn');
-  if(!S.sleepEnd){ label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Apagado'; return; }
+  if(!S.sleepEnd){ label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Desactivado'; return; }
   const left=S.sleepEnd-Date.now();
   if(left<=0){
     clearInterval(S.sleepT); S.sleepT=null; S.sleepEnd=0;
     pauseNow(); audio.volume=S.vol;
-    label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Apagado'; return;
+    label.hidden=true; btn.classList.remove('on'); $('#sleepLabel').textContent='Desactivado'; return;
   }
-  label.hidden=false; label.textContent='Se apaga en '+fmt(left); $('#sleepLabel').textContent=fmt(left);
+  label.hidden=false; label.textContent='Se apaga en '+fmt(left); $('#sleepLabel').textContent='Se apaga en '+fmt(left);
   btn.classList.add('on');
   if($('#sleepPop').classList.contains('show')) paintSleepPop();
   if(left<=10000) audio.volume=Math.max(0,S.vol*(left/10000));
 }
-/* «Apagado» abre una ventana con − / + de 15 en 15 min (hasta 4 h). */
+/* El temporizador se ajusta con − / + de 15 en 15 min (máximo 2 h). */
 let sleepPopT=null;
 const minTxt=m=>m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+(m%60)+' min':'');
 const sleepMin=()=>S.sleepEnd?Math.ceil(Math.max(0,S.sleepEnd-Date.now())/60000):0;
 function paintSleepPop(){
   const m=sleepMin();
-  $('#sleepBig').textContent=m?minTxt(m):'Desactivado';
+  $('#sleepBig').textContent=m?minTxt(m):'Desactivado'; $('#sleepBig').classList.toggle('off',!m);
   $('#sleepSub').textContent=m?'Se apagará a las '+new Date(S.sleepEnd).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'Pulsa +15 para activarlo';
   $('#sleepOff').hidden=!m; $('#sleepMinus').disabled=!m;
 }
@@ -1065,7 +1081,7 @@ function bumpSleepPop(){ clearTimeout(sleepPopT); sleepPopT=setTimeout(closeSlee
 function closeSleepPop(){ const pop=$('#sleepPop'); pop.classList.remove('show'); pop.inert=true; clearTimeout(sleepPopT); }
 function adjustSleep(d){
   const r=Math.round(sleepMin()/15)*15;
-  const t=d>0?Math.min(240,r+15):Math.max(15,r-15);
+  const t=d>0?Math.min(120,r+15):Math.max(15,r-15);
   if(d<0&&!S.sleepEnd) return;
   setSleep(t); paintSleepPop(); bumpSleepPop();
 }
