@@ -180,10 +180,10 @@ h1,h2,p{margin:0}
 .brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:2px 4px 0}
 .wordmark{font-family:var(--font-display);font-weight:800;font-size:1.5rem;letter-spacing:-.04em;line-height:1}
 
-.brandl{display:flex;align-items:center;gap:10px}
-.backbtn{width:32px;height:32px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.14);color:#fff;cursor:pointer;flex:none}
-.backbtn:hover{background:rgba(255,255,255,.26)}
-.backbtn svg{width:18px;height:18px}
+
+
+
+
 .favtop{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 8px 0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.14);color:#fff;font:700 .8125rem/1 var(--font-body);cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .favtop:hover{background:rgba(255,255,255,.26)}
 .favtop svg{width:16px;height:16px;fill:var(--heart);flex:none}
@@ -402,11 +402,17 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .dock .ibtn.play{width:60px;height:60px;flex:none;margin-right:8px;box-shadow:0 0 0 4px var(--needle-glow)}
 .dock .dockfav{width:46px;height:46px;flex:none;margin-right:2px}
 .dock .dockfav[aria-pressed="true"]{background:var(--heart);border-color:var(--heart);color:#fff}
-.strip-arrow{flex:none;align-self:flex-start;margin-top:19px;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:var(--needle);color:var(--on-needle);cursor:pointer;box-shadow:0 0 0 3px var(--needle-glow)}
+.strip-arrow{flex:none;align-self:center;margin-top:-10px;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:var(--needle);color:var(--on-needle);cursor:pointer;box-shadow:0 0 0 3px var(--needle-glow)}
 .strip-arrow svg{width:22px;height:22px}
 .strip-arrow:hover{background:#FFEB7A}
 .strip-arrow:disabled{opacity:.28;box-shadow:none;cursor:default}
-.dock-more{flex:0 0 100%;display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 0;min-height:36px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .8125rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
+.dock-row2{flex:0 0 100%;display:flex;gap:8px;margin-top:8px}
+.dock-more,.dock-home{display:flex;align-items:center;justify-content:center;gap:8px;min-height:40px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .875rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
+.dock-more{flex:7 1 0}
+.dock-home{flex:3 1 0}
+.dock-home:hover{color:var(--needle);border-color:var(--needle)}
+.dock-home svg{width:17px;height:17px}
+.dock-more-old{display:flex;align-items:center;justify-content:center;gap:8px;margin:0;min-height:36px;border:1px solid var(--dial-line);border-radius:12px;background:transparent;color:var(--dial-muted);font:600 .8125rem/1 var(--font-body);letter-spacing:.02em;cursor:pointer}
 .dock-more:hover{color:var(--needle);border-color:var(--needle)}
 .dock-more svg{width:16px;height:16px;transition:transform .25s}
 .dock-more.open svg{transform:rotate(180deg)}
@@ -418,16 +424,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 body.sheet-open{overflow:hidden}
 .strip-empty{align-self:center;padding:0 10px;font:500 .8125rem/1.3 var(--font-body);color:var(--dial-muted);white-space:normal;max-width:210px}
 .dock .ibtn.play svg{width:26px;height:26px}
-.strip{position:relative;flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.strip{position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:space-around;gap:6px;overflow:hidden;padding:2px 0}
 .strip::-webkit-scrollbar{display:none}
-.chip-st{all:unset;box-sizing:border-box;flex:none;width:74px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;scroll-snap-align:center;font:600 .75rem/1.1 var(--font-body);color:var(--dial-muted);text-align:center;-webkit-tap-highlight-color:transparent}
+.chip-st{all:unset;box-sizing:border-box;flex:1 1 0;min-width:0;max-width:104px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font:600 .75rem/1.1 var(--font-body);color:var(--dial-muted);text-align:center;-webkit-tap-highlight-color:transparent;opacity:.92}
 .chip-st:focus-visible{outline:3px solid var(--needle);outline-offset:2px;border-radius:14px}
-.chip-st .logo{width:70px;aspect-ratio:1;border-radius:16px;border:2px solid transparent}
+.chip-st .logo{width:58px;aspect-ratio:1;border-radius:15px;border:2px solid transparent}
 .chip-st .logo .badge{display:none}
 .chip-st .mono{font-size:1.05rem}
 .chip-st span{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chip-st.on{color:var(--needle)}
-.chip-st.on .logo{border-color:var(--needle);box-shadow:0 0 0 3px var(--needle-glow)}
+.chip-st.on{color:var(--needle);opacity:1}
+.chip-st.on .logo{width:76px;border-radius:18px;border-color:var(--needle);box-shadow:0 0 0 3px var(--needle-glow)}
+.chip-st.pop{animation:chipin .28s ease-out}
+@keyframes chipin{from{transform:scale(.9);opacity:.4}to{transform:none}}
 
 /* Modo pantalla (stand-by con colores) */
 body.amb-open{overflow:hidden}
@@ -452,7 +460,7 @@ body.amb-open{overflow:hidden}
 .amb .ibtn{border-color:currentColor;color:inherit;width:56px;height:56px}
 .amb .ibtn.play{width:76px;height:76px;background:#fff;color:#0A0F2C;border:0;box-shadow:none}
 
-@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px} .chip-st{width:70px} .chip-st .logo{width:66px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
+@media (max-width:400px){ .dock .ibtn.play{width:54px;height:54px;margin-right:4px} .dock .dockfav{width:42px;height:42px}  .chip-st .logo{width:52px} .chip-st.on .logo{width:68px}  .side{width:50px;height:52px} .controls .ibtn.play{width:60px;height:60px} .ctl-row.rowmain .ibtn:not(.play){width:44px;height:44px} }
 @media (max-width:760px){
   .now{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:12px}
   .viz{grid-row:auto;width:calc(100% - 104px)}
@@ -528,7 +536,7 @@ body.amb-open{overflow:hidden}
 <header class="hero">
   <div class="wrap">
     <div class="brand">
-      <div class="brandl"><button class="backbtn" id="backBtn" type="button" aria-label="Volver a la portada"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h1 class="wordmark">Sintonía</h1></div>
+      <h1 class="wordmark">Sintonía</h1>
       <button class="favtop" id="favTop" type="button" aria-label="Ir a mis favoritas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.3C1.7 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 3 1.7-2 3.3-3 5.2-3 3.2 0 5.1 3 4 6.2-1.7 4.7-9.2 9.3-9.2 9.3z"/></svg>Favoritos<span class="n" id="favTopN">0</span></button>
     </div>
 
@@ -625,10 +633,13 @@ body.amb-open{overflow:hidden}
 </div>
 
 <nav class="dock" id="dock" aria-label="Cambiar de emisora">
-  <button class="strip-arrow" id="stripPrev" type="button" aria-label="Ver emisoras anteriores"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="strip-arrow" id="stripPrev" type="button" aria-label="Emisora anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <div class="strip" id="strip"></div>
-  <button class="strip-arrow" id="stripNext" type="button" aria-label="Ver más emisoras"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-  <button class="dock-more" id="moreBtn" type="button" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="moreLabel">Ajustes</span></button>
+  <button class="strip-arrow" id="stripNext" type="button" aria-label="Emisora siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <div class="dock-row2">
+    <button class="dock-more" id="moreBtn" type="button" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="moreLabel">Ajustes</span></button>
+    <button class="dock-home" id="homeBtn" type="button" aria-label="Volver a la portada"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5l-7 7 7 7M3 12h13a5 5 0 0 1 5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver</button>
+  </div>
 </nav>
 
 <div class="amb" id="amb" hidden role="dialog" aria-label="Modo pantalla">
@@ -1314,19 +1325,15 @@ if('ResizeObserver' in window) new ResizeObserver(vSize).observe(viz); else addE
 let stripShown=null;
 function renderStrip(){
   const box=$('#strip'); box.replaceChildren();
-  const list=S.stripFav?S.list.filter(x=>S.favs.has(x.id)):S.list;
-  if(!list.length) box.append(h('span',{class:'strip-empty'},'Aún no tienes favoritas. Toca «Favorita» en una emisora.'));
-  for(const st of list) box.append(h('button',{class:'chip-st',type:'button','data-id':st.id,'aria-label':'Sintonizar '+st.name,onclick:()=>onPick(st)},logo(st),h('span',{},st.name)));
-  stripShown=null; markStrip();
-}
-function markStrip(){
-  const box=$('#strip'); let cur=null;
-  $$('.chip-st',box).forEach(b=>{ const on=b.dataset.id===S.cur.id; b.classList.toggle('on',on); if(on) cur=b; });
-  if(cur&&stripShown!==S.cur.id){
-    stripShown=S.cur.id;
-    box.scrollTo({left:cur.offsetLeft-(box.clientWidth-cur.offsetWidth)/2,behavior:'smooth'});
+  const n=S.list.length, i=Math.max(0,S.list.indexOf(S.cur));
+  const trio=n>=3?[S.list[(i-1+n)%n],S.cur,S.list[(i+1)%n]]:[...S.list];
+  for(const st of trio){
+    const b=h('button',{class:'chip-st'+(st.id===S.cur.id?' on':''),type:'button','data-id':st.id,'aria-label':(st.id===S.cur.id?'Emisora actual: ':'Sintonizar ')+st.name,onclick:()=>onPick(st)},logo(st),h('span',{},st.name));
+    box.append(b);
   }
+  stripShown=S.cur.id;
 }
+function markStrip(){ if(stripShown!==S.cur.id){ renderStrip(); const c=$('#strip .chip-st.on'); if(c) c.classList.add('pop'); } }
 let shownId=null;
 function render(){
   const st=S.cur, m=S.mode;
@@ -1491,7 +1498,7 @@ function reopenCover(){
   $('#coverGo').focus({preventScroll:true});
 }
 $('#coverGo').addEventListener('click',()=>closeCover(!(S.mode==='playing'||S.mode==='tuning')));
-$('#backBtn').addEventListener('click',reopenCover);
+$('#homeBtn').addEventListener('click',reopenCover);
 $('#coverSkip').addEventListener('click',()=>{ closeCover(false); setTimeout(()=>setSheet(true),400); });
 
 /* ---------- Modo pantalla ---------- */
@@ -1526,16 +1533,8 @@ $('#prevBtn').addEventListener('click',()=>step(-1));
 $('#nextBtn').addEventListener('click',()=>step(1));
 $('#favBtn').addEventListener('click',()=>toggleFav(S.cur.id));
 $('#srcBtn').addEventListener('click',nextSource);
-const strip=$('#strip');
-function armArrows(){
-  $('#stripPrev').disabled=strip.scrollLeft<=2;
-  $('#stripNext').disabled=strip.scrollLeft>=strip.scrollWidth-strip.clientWidth-2;
-}
-$('#stripPrev').addEventListener('click',()=>strip.scrollBy({left:-strip.clientWidth*0.75,behavior:'smooth'}));
-$('#stripNext').addEventListener('click',()=>strip.scrollBy({left:strip.clientWidth*0.75,behavior:'smooth'}));
-strip.addEventListener('scroll',armArrows,{passive:true});
-addEventListener('resize',armArrows);
-setTimeout(armArrows,300);
+$('#stripPrev').addEventListener('click',()=>step(-1));
+$('#stripNext').addEventListener('click',()=>step(1));
 const sheet=$('#sheet');
 function setSheet(open){
   sheet.classList.toggle('open',open); sheet.inert=!open;
