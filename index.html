@@ -72,6 +72,11 @@ html{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
 /* App instalada: la barra de estado del móvil queda pintada del color de la portada */
 body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#141B4D;z-index:50;pointer-events:none}
 .cover,.card-main,.ibtn,.chip,.chip-st{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+img,svg{-webkit-user-drag:none;user-drag:none}
+input,textarea,.share-url{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+::selection{background:transparent}
+input::selection,textarea::selection,.share-url::selection{background:rgba(58,75,255,.35)}
 button{font:inherit;color:inherit;touch-action:manipulation}
 h1,h2,p{margin:0}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
