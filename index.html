@@ -39,7 +39,7 @@
 
   --bg:#F1F2F8; --surface:#FFFFFF; --ink:#10142E; --muted:#596083; --line:#DBDEEE;
   --accent:#2A3BFF; --on-accent:#FFFFFF;
-  --hero:#2A3BFF; --on-hero:#FFFFFF; --ring:rgba(255,255,255,.10);
+  --c:#FF3D6E; --hero:#2A3BFF; --on-hero:#FFFFFF; --ring:rgba(255,255,255,.10);
   --dial:#0A0F2C; --on-dial:#E9ECFF; --dial-muted:#8993D2; --dial-line:#252D69; --tick:#4A57B4;
   --needle:#FFE14A; --needle-glow:rgba(255,225,74,.45); --on-needle:#0A0F2C;
   --heart:#FF3D6E; --live:#35E08A; --warn:#FFB020;
@@ -70,7 +70,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--font
 body.cover-open{overflow:hidden}
 html{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
 /* App instalada: la barra de estado del móvil queda pintada del color de la portada */
-body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--hero);z-index:50;pointer-events:none}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#141B4D;z-index:50;pointer-events:none}
 .cover,.card-main,.ibtn,.chip,.chip-st{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 button{font:inherit;color:inherit;touch-action:manipulation}
 h1,h2,p{margin:0}
@@ -176,8 +176,13 @@ h1,h2,p{margin:0}
 /* ---------- Portada del reproductor ---------- */
 .hero{
   display:flex;flex-direction:column;min-height:100vh;min-height:100svh;
-  background-color:var(--hero);
-  background-image:repeating-radial-gradient(circle at 100% 0,transparent 0 26px,var(--ring) 26px 27px);
+  background-color:#0A0F2C;
+  background-image:
+    radial-gradient(120% 55% at 50% 0%,color-mix(in srgb,var(--c) 55%,transparent),transparent 62%),
+    radial-gradient(80% 45% at 100% 100%,rgba(58,75,255,.55),transparent 70%),
+    radial-gradient(70% 40% at 0% 80%,color-mix(in srgb,var(--c) 28%,transparent),transparent 70%),
+    linear-gradient(180deg,#141B4D 0%,#0A0F2C 55%,#070A1F 100%);
+  transition:background .6s;
   color:var(--on-hero);
   padding-top:calc(env(safe-area-inset-top,0px) + 12px);
   padding-bottom:calc(var(--dock) + 12px);
@@ -198,24 +203,16 @@ h1,h2,p{margin:0}
 
 .console-wrap{position:relative;z-index:2;flex:1;display:flex;margin-top:12px}
 .console{
-  --c:#FF3D6E;
   position:relative;overflow:hidden;color:var(--on-dial);width:100%;
-  background:
-    radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--c) 55%,transparent),transparent 62%),
-    radial-gradient(80% 55% at 100% 100%,rgba(58,75,255,.55),transparent 70%),
-    radial-gradient(70% 50% at 0% 85%,color-mix(in srgb,var(--c) 28%,transparent),transparent 70%),
-    linear-gradient(180deg,#141B4D 0%,#0A0F2C 55%,#070A1F 100%);
-  transition:background .6s;
   display:flex;flex-direction:column;justify-content:space-between;
   border-radius:24px;padding:20px 20px 22px;
-  box-shadow:0 30px 60px -28px rgba(4,6,40,.75),inset 0 1px 0 rgba(255,255,255,.07);
 }
 .console::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
   background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.4px);background-size:18px 18px;
   -webkit-mask-image:linear-gradient(180deg,#000,transparent 70%);mask-image:linear-gradient(180deg,#000,transparent 70%)}
 .console>*{position:relative}
 .console>.fabs{position:absolute}
-.console::after{content:"";position:absolute;inset:0 0 58% 0;background:linear-gradient(180deg,rgba(255,255,255,.055),transparent);pointer-events:none}
+.console::after{display:none}
 
 /* Dial */
 .dial{position:relative;height:84px;margin:2px 14px 22px}
@@ -429,7 +426,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .credits + .credits{margin-top:12px}
 
 /* Dock inferior: play + carrusel de emisoras */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;flex-wrap:wrap;align-items:center;align-content:center;background:var(--dial);color:var(--on-dial);border-top:1px solid var(--dial-line);padding:10px max(8px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;flex-wrap:wrap;align-items:center;align-content:center;background:rgba(7,10,31,.55);-webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3);color:var(--on-dial);border-top:1px solid rgba(255,255,255,.12);padding:10px max(8px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));box-shadow:0 -14px 30px -14px rgba(4,6,40,.55)}
 .dock .ibtn.play{width:60px;height:60px;flex:none;margin-right:8px;box-shadow:0 0 0 4px var(--needle-glow)}
 .dock .dockfav{width:46px;height:46px;flex:none;margin-right:2px}
 .dock .dockfav[aria-pressed="true"]{background:var(--heart);border-color:var(--heart);color:#fff}
@@ -1438,7 +1435,7 @@ function render(){
 
   if(shownId!==st.id){
     shownId=st.id;
-    $('#nowLogo').replaceChildren(logo(st)); $('#console').style.setProperty('--c',st.color);
+    $('#nowLogo').replaceChildren(logo(st)); document.documentElement.style.setProperty('--c',st.color);
     $('#nowName').textContent=st.name;
   }
   $('#statusText').textContent=statusText();
