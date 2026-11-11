@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#2A3BFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1E2AD2" media="(prefers-color-scheme: dark)">
@@ -72,7 +72,8 @@ html{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
 /* App instalada: la barra de estado del móvil queda pintada del color de la portada */
 body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#141B4D;z-index:50;pointer-events:none}
 .cover,.card-main,.ibtn,.chip,.chip-st{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html,body{touch-action:pan-x pan-y}
 img,svg{-webkit-user-drag:none;user-drag:none}
 input,textarea,.share-url{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 ::selection{background:transparent}
@@ -1612,6 +1613,9 @@ $('#shareBtn').addEventListener('click',async()=>{
   if(navigator.share){ try{ await navigator.share({title:'Sintonía',text:'Las emisoras de radio más escuchadas de España',url:shareLink}); }catch{} }
   else copyLink();
 });
+/* Sin zoom: pellizco (el doble toque ya lo evita touch-action) */
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
+document.addEventListener('touchmove',e=>{ if(e.touches.length>1) e.preventDefault(); },{passive:false});
 const offScreen=$('#offScreen');
 $('#coverExit').addEventListener('click',()=>{
   try{ setSleep(0); }catch{}
