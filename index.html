@@ -460,7 +460,9 @@ body.sheet-open{overflow:hidden}
 .strip::-webkit-scrollbar{display:none}
 .chip-st{all:unset;box-sizing:border-box;flex:0 0 33.3333%;min-width:0;padding:0 4px;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font:600 .75rem/1.1 var(--font-body);color:var(--dial-muted);text-align:center;-webkit-tap-highlight-color:transparent}
 .chip-st:focus-visible{outline:3px solid var(--needle);outline-offset:2px;border-radius:14px}
-.chip-st .logo{width:82px;aspect-ratio:1;border-radius:50%;border:2px solid transparent}
+.chip-st .logo{width:82px;aspect-ratio:1;border-radius:50%;border:3px solid #fff;box-sizing:border-box}
+.chip-st .logo img.full{padding:0;object-fit:cover}
+.chip-st .logo img.ico{width:66%}
 .chip-st .logo .badge{display:none}
 .chip-st .mono{font-size:1rem;letter-spacing:-.04em}
 .chip-st span{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
