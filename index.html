@@ -562,6 +562,23 @@ body.amb-open{overflow:hidden}
 .share-btns button{flex:1;min-height:48px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:700 .9375rem/1 var(--font-body);cursor:pointer}
 .share-btns .primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .share .hint{margin:8px 0 0}
+.search{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;padding:0 14px;min-height:48px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--muted)}
+.search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.search input{all:unset;flex:1;min-width:0;font:400 1rem/1.2 var(--font-body);color:var(--ink);padding:12px 0}
+.search input::placeholder{color:var(--muted)}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none}
+.order-wrap{padding:0 14px 16px}
+.order{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.order li{display:flex;align-items:center;gap:12px;padding:8px 10px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.order .n{width:22px;text-align:center;font:600 .8125rem/1 var(--font-mono);color:var(--muted)}
+.order .logo{width:40px;aspect-ratio:1;border-radius:50%;flex:none;border:2px solid #fff;box-sizing:border-box}
+.order .logo img.full{padding:0;object-fit:cover}
+.order .logo .badge{display:none}
+.order .nm{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.order button{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.order button:disabled{opacity:.3;cursor:default}
+.order button svg{width:20px;height:20px}
+.order-reset{margin-top:12px;width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .9375rem/1 var(--font-body);cursor:pointer}
 </style>
 </head>
 <body class="cover-open">
@@ -650,8 +667,18 @@ body.amb-open{overflow:hidden}
   <div class="section-head">
     <h2>Emisoras</h2>
     <div class="filters" id="filters" role="group" aria-label="Filtrar emisoras"></div>
+    <label class="search" for="q"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Buscar emisora…" autocomplete="off" enterkeyhint="search" aria-label="Buscar emisora"></label>
   </div>
   <ul class="grid" id="grid"></ul>
+
+  <details class="add" id="orderBox">
+    <summary>Ordenar emisoras</summary>
+    <div class="order-wrap">
+      <p class="hint">Así aparecen en el carrusel de abajo. Usa las flechas para subir o bajar cada emisora.</p>
+      <ol class="order" id="orderList"></ol>
+      <button type="button" class="order-reset" id="orderReset">Restablecer orden original</button>
+    </div>
+  </details>
 
   <details class="add" open>
     <summary>Añadir una emisora</summary>
@@ -821,6 +848,7 @@ const S={
   vol:1,stripFav:false,sleepEnd:0,sleepT:null,song:'',bad:new Map()
 };
 S.list=[...BUILTIN,...store.get('custom',[]).map(c=>({...c,custom:true}))];
+{ const ord=store.get('order',[]); if(ord.length){ const ix=id=>{ const i=ord.indexOf(id); return i<0?1e6:i; }; S.list=S.list.map((x,i)=>[x,i]).sort((a,b)=>ix(a[0].id)-ix(b[0].id)||a[1]-b[1]).map(a=>a[0]); } }
 const lastId=store.get('last',null);
 S.cur=S.list.find(s=>s.id===lastId)||S.list[0];
 const pos=i=>((i+.5)/S.list.length*100).toFixed(2);
@@ -1209,7 +1237,7 @@ function removeCustom(id){
   S.list=S.list.filter(s=>s.id!==id); S.favs.delete(id);
   store.set('favs',[...S.favs]); saveCustom();
   if(wasCur){ pauseNow(); S.cur=S.list[0]; }
-  renderGrid(); renderStrip(); render();
+  renderGrid(); renderStrip(); renderOrder(); render();
 }
 $('#addForm').addEventListener('submit',e=>{
   e.preventDefault();
@@ -1223,7 +1251,7 @@ $('#addForm').addEventListener('submit',e=>{
   const color=PALETTE[S.list.length%PALETTE.length];
   S.list.push({id:'c'+Date.now().toString(36),name,tag:'Mi emisora',kind:'music',color,ink:'#fff',mono,url:raw,custom:true});
   saveCustom(); $('#addForm').reset();
-  renderGrid(); renderStrip(); render();
+  renderGrid(); renderStrip(); renderOrder(); render();
   msg.textContent='Añadida.';
 });
 $('#npUrl').value=store.get('npProxy','')||'';
@@ -1316,8 +1344,10 @@ function statusText(){
   if(S.mode==='paused'&&S.ready) return 'Lista · pulsa play';
   return STATUS[S.mode];
 }
+const fold=t=>t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 function visibleList(){
-  return S.list.filter(s=>S.filter==='all'||(S.filter==='fav'?S.favs.has(s.id):s.kind===S.filter));
+  const q=fold(S.q||'');
+  return S.list.filter(s=>(S.filter==='all'||(S.filter==='fav'?S.favs.has(s.id):s.kind===S.filter))&&(!q||fold(s.name+' '+(s.tag||'')).includes(q)));
 }
 function onPick(st){
   if(S.cur&&S.cur.id===st.id&&(S.mode==='playing'||S.mode==='tuning')) pauseNow(); else tune(st);
@@ -1348,7 +1378,7 @@ function renderFavSec(){
 function renderGrid(){
   const ul=$('#grid'); ul.replaceChildren();
   const list=visibleList();
-  if(!list.length) ul.append(h('li',{class:'empty'},S.filter==='fav'?'Todavía no tienes favoritas. Pulsa el corazón de una emisora para guardarla aquí.':'No hay emisoras en esta categoría.'));
+  if(!list.length) ul.append(h('li',{class:'empty'},S.filter==='fav'?'Todavía no tienes favoritas. Pulsa el corazón de una emisora para guardarla aquí.':(S.q?'No hay ninguna emisora con «'+S.q+'». Prueba con otra palabra.':'No hay emisoras en esta categoría.')));
   for(const st of list) ul.append(card(st));
   renderChips(); renderFavSec(); markCards();
   $('#favTopN').textContent=String(S.favs.size);
@@ -1408,6 +1438,30 @@ document.addEventListener('visibilitychange',()=>{ if(!document.hidden) startViz
 if('ResizeObserver' in window) new ResizeObserver(vSize).observe(viz); else addEventListener('resize',vSize);
 let stripShown=null;
 let stripCur=null;
+function renderOrder(focusId,dir){
+  const ol=$('#orderList'); ol.replaceChildren();
+  const up='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>';
+  const dn='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+  S.list.forEach((st,i)=>{
+    ol.append(h('li',{'data-id':st.id},h('span',{class:'n'},String(i+1)),logo(st),h('span',{class:'nm'},st.name),
+      h('button',{type:'button','aria-label':'Subir '+st.name,html:up,disabled:i===0,onclick:()=>moveSt(st.id,-1)}),
+      h('button',{type:'button','aria-label':'Bajar '+st.name,html:dn,disabled:i===S.list.length-1,onclick:()=>moveSt(st.id,1)})));
+  });
+  if(focusId){ const li=ol.querySelector(`li[data-id="${focusId}"]`); const bs=li&&li.querySelectorAll('button'); if(bs){ const b=bs[dir<0?0:1]; (b.disabled?bs[dir<0?1:0]:b).focus({preventScroll:true}); } }
+}
+function moveSt(id,d){
+  const i=S.list.findIndex(x=>x.id===id), j=i+d; if(i<0||j<0||j>=S.list.length) return;
+  [S.list[i],S.list[j]]=[S.list[j],S.list[i]];
+  store.set('order',S.list.map(x=>x.id));
+  renderOrder(id,d); renderStrip(); renderGrid();
+}
+$('#orderReset').addEventListener('click',()=>{
+  store.set('order',[]);
+  const base=[...BUILTIN,...store.get('custom',[]).map(c=>({...c,custom:true}))];
+  S.list=base.map(b=>S.list.find(x=>x.id===b.id)||b);
+  renderOrder(); renderStrip(); renderGrid();
+});
+$('#q').addEventListener('input',e=>{ S.q=e.target.value.trim(); renderGrid(); });
 function renderStrip(){
   const box=$('#strip'); box.replaceChildren();
   for(const st of S.list){
@@ -1723,7 +1777,7 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   addEventListener('load',()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
 
-renderStrip(); renderGrid(); render();
+renderStrip(); renderGrid(); renderOrder(); render();
 openCover();
 })();
 </script>
